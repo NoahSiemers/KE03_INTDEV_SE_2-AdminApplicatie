@@ -7,31 +7,48 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/KE03_INTDEV_SE_2_Base.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">KE03_INTDEV_SE_2_Base</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+    <header class="main-navbar">
+        <div class="navbar-logo">
+            <a asp-page="/Index">Matrix inc.</a>
+        </div>
+
+        <form class="navbar-search" method="get" asp-page="/Index">
+            <input type="text" name="searchTerm" placeholder="Zoeken..." />
+            <button type="submit" aria-label="Zoeken">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </form>
+
+        <div class="navbar-icons">
+            <a asp-page="/Index" title="Webshop">
+                <i class="fa-solid fa-globe"></i>
+            </a>
+
+            <div class="nav-dropdown">
+                <button type="button" class="nav-icon-button" title="Account">
+                    <i class="fa-regular fa-user"></i>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Customers" asp-action="Index">Customers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+            </div>
+
+            <div class="nav-dropdown">
+                <button type="button" class="nav-icon-button" title="Beheer">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+
+                <div class="nav-dropdown-menu">
+                    <a asp-page="/Admin/Products">Producten</a>
+                    <a asp-page="/Admin/Orders">Bestellingen</a>
+                    <a asp-page="/Admin/Complaints">Klachten</a>
+                    <a asp-page="/Admin/Delivery">Bezorging</a>
+                    <a asp-page="/Admin/Staff">Personeel</a>
+                    <a asp-page="/Admin/Suppliers">Leverancier</a>
+                    <a asp-page="/Admin/Employees">Medewerker</a>
                 </div>
             </div>
-        </nav>
+        </div>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
