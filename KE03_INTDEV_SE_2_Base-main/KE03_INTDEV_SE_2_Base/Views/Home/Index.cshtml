@@ -1,0 +1,31 @@
+﻿@model KE03_INTDEV_SE_2_Base.ViewModels.HomeIndexViewModel
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<section class="home-dashboard">
+    <div class="welcome-section">
+        <h1>@Model.WelcomeText</h1>
+        <p>@Model.DateText</p>
+
+        <blockquote class="zen-quote">
+            “@Model.Quote.Quote”
+            <footer>- @Model.Quote.Author</footer>
+        </blockquote>
+    </div>
+
+    <div class="dashboard-cards">
+        <a asp-controller="Complaints" asp-action="Index" class="dashboard-card">
+            <h2>Klachten</h2>
+        </a>
+
+        <a asp-controller="Orders" asp-action="Index" class="dashboard-card">
+            <h2>Bestellingen</h2>
+        </a>
+
+        <a asp-controller="Products" asp-action="Index" class="dashboard-card">
+            <h2>Producten</h2>
+        </a>
+    </div>
+</section>

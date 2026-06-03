@@ -1,0 +1,78 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.home-dashboard {
+    padding: 48px;
+}
+
+.welcome-section {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+    .welcome-section h1 {
+        font-size: 48px;
+        margin-bottom: 8px;
+    }
+
+    .welcome-section p {
+        font-size: 20px;
+        color: #666;
+    }
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.dashboard-card {
+    min-height: 160px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background-color: white;
+    color: black;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .dashboard-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+    }
+
+    .dashboard-card h2 {
+        font-size: 28px;
+        margin: 0;
+    }
+
+@media (max-width: 800px) {
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+}
