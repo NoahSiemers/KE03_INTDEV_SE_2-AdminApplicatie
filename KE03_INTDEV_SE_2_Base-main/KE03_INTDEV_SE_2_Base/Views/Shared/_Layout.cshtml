@@ -12,7 +12,7 @@
 <body>
     <header class="main-navbar">
         <div class="navbar-logo">
-            <a asp-page="/Index">Matrix inc.</a>
+            <a asp-controller="Home" asp-action="Index">Matrix Inc.</a>
         </div>
 
         <form class="navbar-search" method="get" asp-page="/Index">
@@ -23,7 +23,7 @@
         </form>
 
         <div class="navbar-icons">
-            <a asp-page="/Index" title="Webshop">
+            <a asp-controller="Home" asp-action="Index" title="Webshop">
                 <i class="fa-solid fa-globe"></i>
             </a>
 
