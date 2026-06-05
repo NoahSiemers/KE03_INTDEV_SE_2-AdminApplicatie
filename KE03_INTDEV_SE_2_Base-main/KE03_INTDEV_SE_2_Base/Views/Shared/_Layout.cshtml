@@ -10,57 +10,55 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-    <header class="main-navbar">
-        <div class="navbar-logo">
-            <a asp-controller="Home" asp-action="Index">Matrix Inc.</a>
-        </div>
-
-        <form class="navbar-search" method="get" asp-page="/Index">
-            <input type="text" name="searchTerm" placeholder="Zoeken..." />
-            <button type="submit" aria-label="Zoeken">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-        </form>
-
-        <div class="navbar-icons">
-            <a asp-controller="Home" asp-action="Index" title="Webshop">
-                <i class="fa-solid fa-globe"></i>
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <a class="sidebar-logo" asp-controller="Home" asp-action="Index">
+                Matrix Inc.
             </a>
 
-            <div class="nav-dropdown">
-                <button type="button" class="nav-icon-button" title="Account">
-                    <i class="fa-regular fa-user"></i>
-                </button>
-            </div>
+            <nav class="sidebar-nav">
+                <a asp-controller="Products" asp-action="Index">
+                    <i class="fa-solid fa-cube"></i>
+                    <span>Producten</span>
+                </a>
 
-            <div class="nav-dropdown">
-                <button type="button" class="nav-icon-button" title="Beheer">
-                    <i class="fa-solid fa-gear"></i>
-                </button>
+                <a asp-controller="Orders" asp-action="Index">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Bestellingen</span>
+                </a>
 
-                <div class="nav-dropdown-menu">
-                    <a asp-page="/Admin/Products">Producten</a>
-                    <a asp-page="/Admin/Orders">Bestellingen</a>
-                    <a asp-page="/Admin/Complaints">Klachten</a>
-                    <a asp-page="/Admin/Delivery">Bezorging</a>
-                    <a asp-page="/Admin/Staff">Personeel</a>
-                    <a asp-page="/Admin/Suppliers">Leverancier</a>
-                    <a asp-page="/Admin/Employees">Medewerker</a>
-                </div>
-            </div>
-        </div>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+                <a asp-controller="Complaints" asp-action="Index">
+                    <i class="fa-regular fa-circle-exclamation"></i>
+                    <span>Klachten</span>
+                </a>
+
+                <a href="#">
+                    <i class="fa-solid fa-truck"></i>
+                    <span>Bezorgingen</span>
+                </a>
+
+                <a href="#">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Personeel</span>
+                </a>
+
+                <a href="#">
+                    <i class="fa-regular fa-building"></i>
+                    <span>Leveranciers</span>
+                </a>
+
+                <a href="#">
+                    <i class="fa-solid fa-user-group"></i>
+                    <span>Medewerkers</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - KE03_INTDEV_SE_2_Base - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

@@ -40,7 +40,6 @@ namespace DataAccessLayer.Repositories
         public Product? GetProductById(int id)
         {
             return _context.Products
-                .Include(p => p.Parts)
                 .Include(p => p.Images)
                 .Include(p => p.Specifications)
                 .FirstOrDefault(p => p.Id == id);
@@ -49,6 +48,22 @@ namespace DataAccessLayer.Repositories
         public void UpdateProduct(Product product)
         {
             _context.Products.Update(product);
+            _context.SaveChanges();
+        }
+
+        public void DeleteProduct(int id)
+        {
+            var product = _context.Products
+                .Include(p => p.Images)
+                .Include(p => p.Specifications)
+                .FirstOrDefault(p => p.Id == id);
+
+            if (product == null)
+            {
+                return;
+            }
+
+            _context.Products.Remove(product);
             _context.SaveChanges();
         }
 

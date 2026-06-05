@@ -1,6 +1,252 @@
-﻿@{
+﻿@model KE03_INTDEV_SE_2_Base.ViewModels.ProductIndexViewModel
+
+@{
     ViewData["Title"] = "Producten";
+
+    string ToggleDirection(string column)
+    {
+        if (Model.SortBy == column && Model.SortDirection == "asc")
+        {
+            return "desc";
+        }
+
+        return "asc";
+    }
 }
 
-<h1>Producten</h1>
-<p>Hier komt later het productenbeheer.</p>
+<section class="products-page">
+    <div class="page-header">
+        <h1>Producten</h1>
+
+        <form method="get" asp-controller="Products" asp-action="Index" class="product-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" value="@Model.Search" placeholder="Zoek product..." />
+
+            <input type="hidden" name="category" value="@Model.Category" />
+            <input type="hidden" name="lowStockOnly" value="@Model.LowStockOnly" />
+            <input type="hidden" name="sortBy" value="@Model.SortBy" />
+            <input type="hidden" name="sortDirection" value="@Model.SortDirection" />
+        </form>
+    </div>
+
+    <div class="product-actions">
+        <a asp-controller="Products" asp-action="Create" class="btn-black">
+            + Nieuw product
+        </a>
+
+        <details class="filter-dropdown">
+            <summary class="btn-light">
+                <i class="fa-solid fa-filter"></i>
+                Filter
+            </summary>
+
+            <div class="filter-menu">
+                <a asp-controller="Products"
+                   asp-action="Index"
+                   asp-route-search="@Model.Search"
+                   asp-route-lowStockOnly="@Model.LowStockOnly"
+                   asp-route-sortBy="@Model.SortBy"
+                   asp-route-sortDirection="@Model.SortDirection">
+                    Alle categorieën
+                </a>
+
+                @foreach (var category in Model.Categories)
+                {
+                    <a asp-controller="Products"
+                       asp-action="Index"
+                       asp-route-category="@category"
+                       asp-route-search="@Model.Search"
+                       asp-route-lowStockOnly="@Model.LowStockOnly"
+                       asp-route-sortBy="@Model.SortBy"
+                       asp-route-sortDirection="@Model.SortDirection">
+                        @category
+                    </a>
+                }
+            </div>
+        </details>
+    </div>
+
+    <a class="low-stock-box"
+       asp-controller="Products"
+       asp-action="Index"
+       asp-route-lowStockOnly="true"
+       asp-route-search="@Model.Search"
+       asp-route-category="@Model.Category"
+       asp-route-sortBy="@Model.SortBy"
+       asp-route-sortDirection="@Model.SortDirection">
+        <div class="low-stock-title">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <span>Lage voorraad</span>
+        </div>
+
+        <div class="low-stock-items">
+            @if (Model.LowStockProducts.Any())
+            {
+                @foreach (var product in Model.LowStockProducts)
+                {
+                    <span>@product.Name — @product.Stock stuks</span>
+                }
+            }
+            else
+            {
+                <span>Er zijn geen producten met lage voorraad.</span>
+            }
+        </div>
+    </a>
+
+    @if (Model.LowStockOnly)
+    {
+        <a asp-controller="Products"
+           asp-action="Index"
+           asp-route-search="@Model.Search"
+           asp-route-category="@Model.Category"
+           asp-route-sortBy="@Model.SortBy"
+           asp-route-sortDirection="@Model.SortDirection"
+           class="show-all-products">
+            Alle producten tonen
+        </a>
+    }
+
+    <div class="product-table-wrapper">
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>
+                        <a asp-action="Index"
+                           asp-route-sortBy="id"
+                           asp-route-sortDirection="@ToggleDirection("id")"
+                           asp-route-search="@Model.Search"
+                           asp-route-category="@Model.Category"
+                           asp-route-lowStockOnly="@Model.LowStockOnly">
+                            ID <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+
+                    <th>
+                        <a asp-action="Index"
+                           asp-route-sortBy="product"
+                           asp-route-sortDirection="@ToggleDirection("product")"
+                           asp-route-search="@Model.Search"
+                           asp-route-category="@Model.Category"
+                           asp-route-lowStockOnly="@Model.LowStockOnly">
+                            Product <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+
+                    <th>
+                        <a asp-action="Index"
+                           asp-route-sortBy="prijs"
+                           asp-route-sortDirection="@ToggleDirection("prijs")"
+                           asp-route-search="@Model.Search"
+                           asp-route-category="@Model.Category"
+                           asp-route-lowStockOnly="@Model.LowStockOnly">
+                            Prijs <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+
+                    <th>
+                        <a asp-action="Index"
+                           asp-route-sortBy="categorie"
+                           asp-route-sortDirection="@ToggleDirection("categorie")"
+                           asp-route-search="@Model.Search"
+                           asp-route-category="@Model.Category"
+                           asp-route-lowStockOnly="@Model.LowStockOnly">
+                            Categorie <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+
+                    <th>
+                        <a asp-action="Index"
+                           asp-route-sortBy="voorraad"
+                           asp-route-sortDirection="@ToggleDirection("voorraad")"
+                           asp-route-search="@Model.Search"
+                           asp-route-category="@Model.Category"
+                           asp-route-lowStockOnly="@Model.LowStockOnly">
+                            Voorraad <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+
+                    <th>
+                        <a asp-action="Index"
+                           asp-route-sortBy="toegevoegd"
+                           asp-route-sortDirection="@ToggleDirection("toegevoegd")"
+                           asp-route-search="@Model.Search"
+                           asp-route-category="@Model.Category"
+                           asp-route-lowStockOnly="@Model.LowStockOnly">
+                            Toegevoegd <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+
+                    <th>
+                        <a asp-action="Index"
+                           asp-route-sortBy="leverancier"
+                           asp-route-sortDirection="@ToggleDirection("leverancier")"
+                           asp-route-search="@Model.Search"
+                           asp-route-category="@Model.Category"
+                           asp-route-lowStockOnly="@Model.LowStockOnly">
+                            Leverancier <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.Products.Any())
+                {
+                    @foreach (var product in Model.Products)
+                    {
+                        <tr class="clickable-row"
+                            onclick="window.location='@Url.Action("Edit", "Products", new { id = product.Id })'">
+                            <td>#@product.Id</td>
+                            <td class="product-name">@product.Name</td>
+                            <td>€ @product.Price.ToString("0.00")</td>
+                            <td>@product.Category</td>
+
+                            <td>
+                                @if (product.Stock <= 7)
+                                {
+                                    <span class="stock-low">@product.Stock</span>
+                                }
+                                else
+                                {
+                                    @product.Stock
+                                }
+                            </td>
+
+                            <td>@product.AddedDate.ToString("dd-MM-yyyy")</td>
+                            <td>@product.Supplier</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="empty-table">
+                            Geen producten gevonden.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <div class="pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <a class="page-number @(Model.CurrentPage == i ? "active" : "")"
+                   asp-controller="Products"
+                   asp-action="Index"
+                   asp-route-page="@i"
+                   asp-route-search="@Model.Search"
+                   asp-route-category="@Model.Category"
+                   asp-route-sortBy="@Model.SortBy"
+                   asp-route-sortDirection="@Model.SortDirection"
+                   asp-route-lowStockOnly="@Model.LowStockOnly">
+                    @i
+                </a>
+            }
+        </div>
+    }
+</section>

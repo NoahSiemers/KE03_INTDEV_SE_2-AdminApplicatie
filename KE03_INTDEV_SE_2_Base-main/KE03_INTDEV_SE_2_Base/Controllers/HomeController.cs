@@ -1,76 +1,38 @@
-using System.Diagnostics;
-using System.Text.Json;
+using DataAccessLayer.Interfaces;
 using KE03_INTDEV_SE_2_Base.Models;
 using KE03_INTDEV_SE_2_Base.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Text.Json;
 
 namespace KE03_INTDEV_SE_2_Base.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly HttpClient _httpClient;
+        private readonly IProductRepository _productRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IProductRepository productRepository)
         {
             _logger = logger;
-            _httpClient = new HttpClient();
+            _productRepository = productRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
+            const int lowStockLimit = 7;
+
             var viewModel = new HomeIndexViewModel
             {
                 WelcomeText = "Welkom",
                 DateText = DateTime.Now.ToString("dddd d MMMM yyyy"),
-                Quote = await GetZenQuoteAsync()
+                LowStockProducts = _productRepository.GetAllProducts()
+                    .Where(p => p.Stock <= lowStockLimit)
+                    .OrderBy(p => p.Stock)
+                    .ToList()
             };
 
             return View(viewModel);
-        }
-
-        private async Task<ZenQuoteViewModel> GetZenQuoteAsync()
-        {
-            try
-            {
-                string url = "https://zenquotes.io/api/random";
-
-                string json = await _httpClient.GetStringAsync(url);
-
-                var quotes = JsonSerializer.Deserialize<List<ZenQuoteApiResponse>>(json);
-
-                var quote = quotes?.FirstOrDefault();
-
-                if (quote == null)
-                {
-                    return new ZenQuoteViewModel
-                    {
-                        Quote = "Geen quote beschikbaar.",
-                        Author = ""
-                    };
-                }
-
-                return new ZenQuoteViewModel
-                {
-                    Quote = quote.q,
-                    Author = quote.a
-                };
-            }
-            catch
-            {
-                return new ZenQuoteViewModel
-                {
-                    Quote = "Geen quote beschikbaar.",
-                    Author = ""
-                };
-            }
-        }
-
-        private class ZenQuoteApiResponse
-        {
-            public string q { get; set; } = string.Empty;
-
-            public string a { get; set; } = string.Empty;
         }
 
         public IActionResult Privacy()

@@ -14,8 +14,8 @@ namespace KE03_INTDEV_SE_2_Base
             // Add services to the container.
             // We gebruiken voor nu even een SQLite voor de database,
             // omdat deze eenvoudig lokaal te gebruiken is en geen extra configuratie nodig heeft.
-            builder.Services.AddDbContext<MatrixIncDbContext>(
-                options => options.UseSqlite("Data Source=MatrixInc.db"));
+            builder.Services.AddDbContext<MatrixIncDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddControllersWithViews();
 
             // We registreren de repositories in de DI container

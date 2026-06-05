@@ -1,0 +1,106 @@
+﻿@model KE03_INTDEV_SE_2_Base.ViewModels.ProductCreateViewModel
+
+@{
+    ViewData["Title"] = "Nieuw product";
+}
+
+<section class="create-product-page">
+    <div class="create-header">
+        <div>
+            <h1>Nieuw product</h1>
+            <p>Voeg een nieuw product toe aan het beheersysteem.</p>
+        </div>
+    </div>
+
+    <form asp-controller="Products" asp-action="Create" method="post" class="create-product-form">
+        @Html.AntiForgeryToken()
+
+        <div class="top-form-actions">
+            <a asp-controller="Products" asp-action="Index" class="btn-light">
+                Terug
+            </a>
+
+            <button type="submit" class="btn-black">
+                Opslaan
+            </button>
+        </div>
+
+        <div class="form-card">
+            <h2>Productinformatie</h2>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label asp-for="Name">Naam product</label>
+                    <input asp-for="Name" placeholder="Bijv. Bosch Boormachine" />
+                    <span asp-validation-for="Name"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Price">Prijs</label>
+                    <input asp-for="Price" type="number" step="0.01" placeholder="Bijv. 49.99" />
+                    <span asp-validation-for="Price"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Stock">Voorraad</label>
+                    <input asp-for="Stock" type="number" placeholder="Bijv. 20" />
+                    <span asp-validation-for="Stock"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Supplier">Leverancier</label>
+                    <input asp-for="Supplier" placeholder="Bijv. Bosch" />
+                    <span asp-validation-for="Supplier"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Category">Categorie</label>
+                    <select asp-for="Category">
+                        <option value="">Kies categorie</option>
+
+                        @foreach (var category in Model.Categories)
+                        {
+                            <option value="@category">@category</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Category"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="MainImageUrl">Hoofdafbeelding</label>
+                    <input asp-for="MainImageUrl" placeholder="/images/products/product.jpg" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="SubImageUrl">Subafbeelding</label>
+                    <input asp-for="SubImageUrl" placeholder="/images/products/product-extra.jpg" />
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label asp-for="Description">Productbeschrijving</label>
+                <textarea asp-for="Description" rows="5" placeholder="Schrijf hier een korte productbeschrijving..."></textarea>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <h2>Productspecificatie</h2>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label asp-for="SpecificationName">Specificatie naam</label>
+                    <input asp-for="SpecificationName" placeholder="Bijv. Materiaal" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="SpecificationValue">Specificatie waarde</label>
+                    <input asp-for="SpecificationValue" placeholder="Bijv. Metaal" />
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

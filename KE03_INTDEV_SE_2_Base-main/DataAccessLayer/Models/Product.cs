@@ -19,6 +19,14 @@ namespace DataAccessLayer.Models
 
         public string? MainImageUrl { get; set; }
 
+        public string Category { get; set; } = string.Empty;
+
+        public int Stock { get; set; }
+
+        public DateTime AddedDate { get; set; }
+
+        public string Supplier { get; set; } = string.Empty;
+
         public ICollection<Order> Orders { get; } = new List<Order>();
 
         public ICollection<Part> Parts { get; } = new List<Part>();

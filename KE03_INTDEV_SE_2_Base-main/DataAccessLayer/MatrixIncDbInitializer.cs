@@ -15,16 +15,11 @@ namespace DataAccessLayer
     {
         public static void Initialize(MatrixIncDbContext context)
         {
-            // Look for any customers.
             if (context.Customers.Any())
             {
-                return;   // DB has been seeded
+                return;
             }
-
-            // TODO: Hier moet ik nog wat namen verzinnen die betrekking hebben op de matrix.
-            // - Denk aan de m3 boutjes, moertjes en ringetjes.
-            // - Denk aan namen van schepen
-            // - Denk aan namen van vliegtuigen            
+      
             var customers = new Customer[]
             {
                 new Customer { Name = "Noah", Address = "123 Elm St" , Active=true},
@@ -44,12 +39,24 @@ namespace DataAccessLayer
 
             var products = new Product[]
             {
-                new Product { Name = "Boormachine GBM 10 RE", Description = "Boormachine GBM 10 RE (Snelspanboorhouder 1 - 10 mm)", Price = 100.99m, MainImageUrl = "/images/products/Bosch.jfif" },
-                new Product { Name = "JMV spaanplaatschroeven", Description = "JMV spaanplaatschroeven 4.0x16mm met verzonken kop - per 200 stuks (VK4016)", Price = 9.99m, MainImageUrl = "/images/products/Schroef.webp" },
-                new Product { Name = "vidaXL Schep", Description = "vidaXL Schep Zwart 68,5 cm Krachtig gecoat staal en massief hout", Price = 24.99m, MainImageUrl = "/images/products/Schep.jpg" },
-                new Product { Name = "Bosch PST 650 Decoupeerzaag", Description = "Bosch PST 650 Decoupeerzaag - op snoer - 500 W", Price = 59.99m, MainImageUrl = "/images/products/Zaag.jpg" },
-                new Product { Name = "Kreator combinatietang", Description = "Kreator combinatietang basic 150mm met PVC handvat (KRT602001)", Price = 14.99m, MainImageUrl = "/images/products/Tang.jpg" },
-                new Product { Name = "BGS Steekringsleutel 36 mm", Description = "BGS 1086 | Steekringsleutel | 36 mm", Price = 19.99m, MainImageUrl = "/images/products/Steekringsleutel.jpg" }
+                new Product { Name = "Boormachine GBM 10 RE", Description = "Boormachine GBM 10 RE", Price = 100.99m, Category = "Gereedschap", Stock = 24, AddedDate = DateTime.Parse("2026-01-12"), Supplier = "Bosch", MainImageUrl = "/images/products/Bosch.jfif" },
+                new Product { Name = "JMV Spaanplaatschroeven", Description = "Spaanplaatschroeven 4.0x16mm", Price = 9.99m, Category = "Schroeven", Stock = 3, AddedDate = DateTime.Parse("2026-01-15"), Supplier = "JMV", MainImageUrl = "/images/products/Schroef.webp" },
+                new Product { Name = "vidaXL Schep", Description = "Schep zwart 68,5 cm", Price = 24.99m, Category = "Tuin", Stock = 18, AddedDate = DateTime.Parse("2026-01-20"), Supplier = "vidaXL", MainImageUrl = "/images/products/Schep.jpg" },
+                new Product { Name = "Bosch PST 650 Decoupeerzaag", Description = "Decoupeerzaag op snoer", Price = 59.99m, Category = "Gereedschap", Stock = 11, AddedDate = DateTime.Parse("2026-01-22"), Supplier = "Bosch", MainImageUrl = "/images/products/Zaag.jpg" },
+                new Product { Name = "Kreator Combinatietang", Description = "Combinatietang basic 150mm", Price = 14.99m, Category = "Gereedschap", Stock = 7, AddedDate = DateTime.Parse("2026-01-25"), Supplier = "Kreator", MainImageUrl = "/images/products/Tang.jpg" },
+                new Product { Name = "BGS Steekringsleutel 36mm", Description = "Steekringsleutel 36mm", Price = 19.99m, Category = "Gereedschap", Stock = 5, AddedDate = DateTime.Parse("2026-01-28"), Supplier = "BGS", MainImageUrl = "/images/products/Steekringsleutel.jpg" },
+                new Product { Name = "Makita Slijpschijf", Description = "Slijpschijf voor metaal", Price = 8.49m, Category = "Gereedschap", Stock = 42, AddedDate = DateTime.Parse("2026-02-01"), Supplier = "Makita" },
+                new Product { Name = "DeWalt Accuboormachine", Description = "Accuboormachine 18V", Price = 149.99m, Category = "Elektra", Stock = 9, AddedDate = DateTime.Parse("2026-02-05"), Supplier = "DeWalt" },
+                new Product { Name = "vidaXL Schroefset", Description = "Schroefset met verschillende maten", Price = 12.99m, Category = "Schroeven", Stock = 60, AddedDate = DateTime.Parse("2026-02-08"), Supplier = "vidaXL" },
+                new Product { Name = "Bosch Haakse Slijper", Description = "Haakse slijper 750W", Price = 79.99m, Category = "Gereedschap", Stock = 14, AddedDate = DateTime.Parse("2026-02-10"), Supplier = "Bosch" },
+                new Product { Name = "Kreator Waterpas", Description = "Waterpas 60 cm", Price = 6.99m, Category = "Meetapparatuur", Stock = 33, AddedDate = DateTime.Parse("2026-02-12"), Supplier = "Kreator" },
+                new Product { Name = "BGS Ringsleutelset", Description = "Set ringsleutels", Price = 34.99m, Category = "Gereedschap", Stock = 20, AddedDate = DateTime.Parse("2026-02-15"), Supplier = "BGS" },
+                new Product { Name = "Makita Klopboor", Description = "Klopboor voor steen en beton", Price = 89.99m, Category = "Elektra", Stock = 6, AddedDate = DateTime.Parse("2026-02-18"), Supplier = "Makita" },
+                new Product { Name = "JMV Pluggen Set", Description = "Pluggen set 100 stuks", Price = 4.99m, Category = "Schroeven", Stock = 100, AddedDate = DateTime.Parse("2026-02-20"), Supplier = "JMV" },
+                new Product { Name = "vidaXL Hark", Description = "Tuin hark met houten steel", Price = 16.99m, Category = "Tuin", Stock = 22, AddedDate = DateTime.Parse("2026-02-22"), Supplier = "vidaXL" },
+                new Product { Name = "DeWalt Cirkelzaag", Description = "Cirkelzaag voor hout", Price = 129.99m, Category = "Elektra", Stock = 4, AddedDate = DateTime.Parse("2026-02-25"), Supplier = "DeWalt" },
+                new Product { Name = "Bosch Schuurmachine", Description = "Schuurmachine voor hout", Price = 69.99m, Category = "Gereedschap", Stock = 13, AddedDate = DateTime.Parse("2026-02-27"), Supplier = "Bosch" },
+                new Product { Name = "Kreator Meetlint", Description = "Meetlint 5 meter", Price = 5.49m, Category = "Meetapparatuur", Stock = 55, AddedDate = DateTime.Parse("2026-03-01"), Supplier = "Kreator" }
             };
             context.Products.AddRange(products);
 

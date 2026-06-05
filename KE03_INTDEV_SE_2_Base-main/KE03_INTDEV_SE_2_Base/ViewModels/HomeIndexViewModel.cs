@@ -1,4 +1,6 @@
-﻿namespace KE03_INTDEV_SE_2_Base.ViewModels
+﻿using DataAccessLayer.Models;
+
+namespace KE03_INTDEV_SE_2_Base.ViewModels
 {
     public class HomeIndexViewModel
     {
@@ -6,6 +8,6 @@
 
         public string DateText { get; set; } = string.Empty;
 
-        public ZenQuoteViewModel Quote { get; set; } = new();
+        public List<Product> LowStockProducts { get; set; } = new();
     }
 }

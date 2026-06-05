@@ -4,28 +4,59 @@
     ViewData["Title"] = "Home";
 }
 
-<section class="home-dashboard">
-    <div class="welcome-section">
-        <h1>@Model.WelcomeText</h1>
-        <p>@Model.DateText</p>
-
-        <blockquote class="zen-quote">
-            “@Model.Quote.Quote”
-            <footer>- @Model.Quote.Author</footer>
-        </blockquote>
+<section class="dashboard-page">
+    <div class="dashboard-header">
+        <p>Welkom</p>
+        <span>@Model.DateText</span>
     </div>
 
-    <div class="dashboard-cards">
-        <a asp-controller="Complaints" asp-action="Index" class="dashboard-card">
-            <h2>Klachten</h2>
-        </a>
+    <div class="dashboard-grid">
+        <article class="dashboard-panel">
+            <a class="panel-title" asp-controller="Complaints" asp-action="Index">
+                Klachten
+            </a>
 
-        <a asp-controller="Orders" asp-action="Index" class="dashboard-card">
-            <h2>Bestellingen</h2>
-        </a>
+            <div class="panel-content">
+                <p class="empty-text">Er zijn nog geen nieuwe klachten.</p>
+            </div>
+        </article>
 
-        <a asp-controller="Products" asp-action="Index" class="dashboard-card">
-            <h2>Producten</h2>
-        </a>
+        <article class="dashboard-panel">
+            <a class="panel-title" asp-controller="Orders" asp-action="Index">
+                Bestellingen
+            </a>
+
+            <div class="panel-content">
+                <p class="empty-text">Er zijn nog geen openstaande bestellingen.</p>
+            </div>
+        </article>
+
+        <article class="dashboard-panel">
+            <a class="panel-title" asp-controller="Products" asp-action="Index" asp-action="Index" asp-route-lowStockOnly="true">
+                Producten
+            </a>
+
+            <div class="panel-content">
+                @if (Model.LowStockProducts.Any())
+                {
+                    <div class="panel-list">
+                        @foreach (var product in Model.LowStockProducts)
+                        {
+                            <a class="panel-list-item"
+                               asp-controller="Products"
+                               asp-action="Index"
+                               asp-route-lowStockOnly="true">
+                                <strong>@product.Name</strong>
+                                <span>@product.Stock stuks op voorraad</span>
+                            </a>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="empty-text">Er zijn geen producten met lage voorraad.</p>
+                }
+            </div>
+        </article>
     </div>
 </section>
