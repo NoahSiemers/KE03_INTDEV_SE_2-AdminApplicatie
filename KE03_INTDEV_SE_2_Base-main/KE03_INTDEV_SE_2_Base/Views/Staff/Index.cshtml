@@ -4,62 +4,63 @@
     ViewData["Title"] = "Personeel";
 }
 
-<h1>Personeel</h1>
+<section class="products-page">
+    <div class="page-header">
+        <h1>Personeel</h1>
 
-<div class="d-flex justify-content-between mb-3">
+        <form method="get" asp-action="Index" class="product-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" value="@Model.Search" placeholder="Zoek medewerker..." />
+        </form>
+    </div>
 
-    <form method="get" asp-action="Index">
+    <div class="product-actions">
+        <a asp-action="Create" class="btn-black">
+            + Nieuwe medewerker
+        </a>
+    </div>
 
-        <input type="text"
-               name="search"
-               value="@Model.Search"
-               placeholder="Zoek medewerker..." />
+    <div class="product-table-wrapper">
+        <table class="product-table">
 
-        <button type="submit">
-            Zoeken
-        </button>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Voornaam</th>
+                    <th>Achternaam</th>
+                    <th>Email</th>
+                    <th>Functie</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
 
-    </form>
+            <tbody>
+                @if (Model.StaffMembers.Any())
+                {
+                    @foreach (var staff in Model.StaffMembers)
+                    {
+                        <tr class="clickable-row"
+                            onclick="window.location='@Url.Action("Edit", new { id = staff.StaffId })'">
+                            <td>#@staff.StaffId</td>
+                            <td>@staff.FirstName</td>
+                            <td>@staff.LastName</td>
+                            <td>@staff.Email</td>
+                            <td>@staff.Function?.Name</td>
+                            <td>@(staff.Active ? "Actief" : "Inactief")</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="empty-table">
+                            Geen medewerkers gevonden.
+                        </td>
+                    </tr>
+                }
+            </tbody>
 
-    <a asp-action="Create" class="btn btn-primary">
-        Nieuwe medewerker
-    </a>
+        </table>
+    </div>
 
-</div>
-
-<table class="table">
-
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Voornaam</th>
-            <th>Achternaam</th>
-            <th>Email</th>
-            <th>Functie</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-        @foreach (var staff in Model.StaffMembers)
-        {
-            <tr onclick="window.location='@Url.Action("Edit", new { id = staff.StaffId })'"
-                style="cursor:pointer">
-
-                <td>@staff.StaffId</td>
-                <td>@staff.FirstName</td>
-                <td>@staff.LastName</td>
-                <td>@staff.Email</td>
-                <td>@staff.Function?.Name</td>
-
-                <td>
-                    @(staff.Active ? "Actief" : "Inactief")
-                </td>
-
-            </tr>
-        }
-
-    </tbody>
-
-</table>
+</section>

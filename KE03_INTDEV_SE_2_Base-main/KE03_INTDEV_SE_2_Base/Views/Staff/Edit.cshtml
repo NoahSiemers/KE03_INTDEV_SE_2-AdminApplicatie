@@ -1,54 +1,72 @@
 ﻿@model KE03_INTDEV_SE_2_Base.ViewModels.StaffViewModel
 
-<h1>Medewerker bewerken</h1>
+@{
+    ViewData["Title"] = "Medewerker bewerken";
+}
 
-<form asp-action="Edit" method="post">
-
-
-    <input asp-for="StaffId" type="hidden" />
-
-    <div class="mb-3">
-        <label asp-for="FirstName">Voornaam</label>
-        <input asp-for="FirstName" class="form-control" />
+<section class="create-product-page">
+    <div class="create-header">
+        <div>
+            <h1>Medewerker bewerken</h1>
+            <p>Pas de gegevens van deze medewerker aan.</p>
+        </div>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="LastName">Achternaam</label>
-        <input asp-for="LastName" class="form-control" />
-    </div>
+    <form asp-controller="Staff" asp-action="Edit" method="post" class="create-product-form">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="StaffId" />
 
-    <div class="mb-3">
-        <label asp-for="Email">E-mailadres</label>
-        <input asp-for="Email" class="form-control" />
-    </div>
+        <div class="top-form-actions">
+            <a asp-controller="Staff" asp-action="Index" class="btn-light">
+                Terug
+            </a>
+            <button type="submit" class="btn-black">
+                Opslaan
+            </button>
+        </div>
 
-    <div class="mb-3">
+        <div class="form-card">
+            <h2>Medewerker informatie</h2>
 
-        <label asp-for="FunctionId">Functie</label>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label asp-for="FirstName">Voornaam</label>
+                    <input asp-for="FirstName" />
+                    <span asp-validation-for="FirstName"></span>
+                </div>
 
-        <select asp-for="FunctionId"
-                asp-items="Model.Functions"
-                class="form-select">
-        </select>
+                <div class="form-group">
+                    <label asp-for="LastName">Achternaam</label>
+                    <input asp-for="LastName" />
+                    <span asp-validation-for="LastName"></span>
+                </div>
 
-    </div>
+                <div class="form-group">
+                    <label asp-for="Email">E-mailadres</label>
+                    <input asp-for="Email" />
+                    <span asp-validation-for="Email"></span>
+                </div>
 
-    <div class="form-check mb-3">
+                <div class="form-group">
+                    <label asp-for="FunctionId">Functie</label>
+                    <select asp-for="FunctionId" asp-items="Model.Functions">
+                        <option value="">-- Kies een functie --</option>
+                    </select>
+                    <span asp-validation-for="FunctionId"></span>
+                </div>
 
-        <input asp-for="Active"
-               class="form-check-input" />
+                <div class="form-group">
+                    <label asp-for="Active">Status</label>
+                    <select asp-for="Active">
+                        <option value="true">Actief</option>
+                        <option value="false">Inactief</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
 
-        <label asp-for="Active"
-               class="form-check-label">
-
-            Actief
-
-        </label>
-
-    </div>
-
-    <button type="submit" class="btn btn-primary">
-        Opslaan
-    </button>
-
-</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
