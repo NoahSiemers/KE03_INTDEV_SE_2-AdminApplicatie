@@ -1,0 +1,241 @@
+﻿@model KE03_INTDEV_SE_2_Base.ViewModels.ComplaintDetailsViewModel
+
+@{
+    ViewData["Title"] = "Klacht details";
+}
+
+<section class="products-page">
+    <div class="detail-back-row">
+        <a asp-controller="Complaints" asp-action="Index" class="btn-light">
+            <i class="fa-solid fa-arrow-left"></i>
+            Terug naar overzicht
+        </a>
+    </div>
+
+    <div class="page-header">
+        <h1>Klacht #@Model.Id</h1>
+    </div>
+
+    <div class="order-detail-grid">
+        <div class="order-detail-card">
+            <h2>Klantgegevens</h2>
+
+            <dl class="order-detail-list">
+                <dt>Klant</dt>
+                <dd>@Model.CustomerName</dd>
+
+                <dt>E-mail</dt>
+                <dd>@Model.CustomerEmail</dd>
+
+                <dt>Klachtdatum</dt>
+                <dd>@Model.ComplaintDate.ToString("dd-MM-yyyy")</dd>
+
+                <dt>Stad</dt>
+                <dd>@Model.City</dd>
+
+                <dt>Kanaal</dt>
+                <dd>@Model.Channel</dd>
+            </dl>
+        </div>
+
+        <div class="order-detail-card">
+            <h2>Klachtgegevens</h2>
+
+            <dl class="order-detail-list">
+                <dt>Onderwerp</dt>
+                <dd>@Model.Subject</dd>
+
+                <dt>Categorie</dt>
+                <dd>@Model.Category</dd>
+
+                <dt>Prioriteit</dt>
+                <dd>@Model.Priority</dd>
+
+                <dt>Toegewezen aan</dt>
+                <dd>@Model.AssignedTo</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="order-status-panel">
+        <div class="order-status-panel-header">
+            <div>
+                <h2>Status en afhandeling</h2>
+                <p>Wijzig hier de status van deze klacht.</p>
+            </div>
+
+            <span class="order-status">@Model.Status</span>
+        </div>
+
+        <form asp-controller="Complaints" asp-action="UpdateStatus" method="post" class="order-status-form complaint-status-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.Id" />
+
+            <div>
+                <label for="status">Nieuwe status</label>
+                <select id="status" name="status">
+                    @foreach (string status in Model.AvailableStatuses)
+                    {
+                        if (status == Model.Status)
+                        {
+                            <option value="@status" selected>@status</option>
+                        }
+                        else
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <button type="submit">Status opslaan</button>
+        </form>
+
+        <div class="order-tracking-grid">
+            <div>
+                <span>Gekoppelde bestelling</span>
+                <strong>
+                    @if (Model.OrderId.HasValue)
+                    {
+                        @("#" + Model.OrderId.Value)
+                    }
+                    else
+                    {
+                        @("Geen")
+                    }
+                </strong>
+            </div>
+
+            <div>
+                <span>Laatste update</span>
+                <strong>@Model.LastUpdated.ToString("dd-MM-yyyy")</strong>
+            </div>
+
+            <div>
+                <span>Deadline</span>
+                <strong>@Model.ResolutionDeadline.ToString("dd-MM-yyyy")</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="order-detail-card complaint-edit-card">
+        <h2>Gegevens aanpassen</h2>
+
+        <form asp-controller="Complaints" asp-action="UpdateComplaintDetails" method="post" class="complaint-edit-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="Id" value="@Model.Id" />
+
+            <div class="complaint-edit-grid">
+                <div class="complaint-edit-field">
+                    <label for="CustomerName">Klant</label>
+                    <input id="CustomerName" name="CustomerName" value="@Model.CustomerName" />
+                </div>
+
+                <div class="complaint-edit-field">
+                    <label for="CustomerEmail">E-mail</label>
+                    <input id="CustomerEmail" name="CustomerEmail" value="@Model.CustomerEmail" />
+                </div>
+
+                <div class="complaint-edit-field">
+                    <label for="Subject">Onderwerp</label>
+                    <input id="Subject" name="Subject" value="@Model.Subject" />
+                </div>
+
+                <div class="complaint-edit-field">
+                    <label for="Category">Categorie</label>
+                    <select id="Category" name="Category">
+                        @foreach (string category in Model.AvailableCategories)
+                        {
+                            if (category == Model.Category)
+                            {
+                                <option value="@category" selected>@category</option>
+                            }
+                            else
+                            {
+                                <option value="@category">@category</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="complaint-edit-field">
+                    <label for="Priority">Prioriteit</label>
+                    <select id="Priority" name="Priority">
+                        @foreach (string priority in Model.AvailablePriorities)
+                        {
+                            if (priority == Model.Priority)
+                            {
+                                <option value="@priority" selected>@priority</option>
+                            }
+                            else
+                            {
+                                <option value="@priority">@priority</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="complaint-edit-field">
+                    <label for="Status">Status</label>
+                    <select id="Status" name="Status">
+                        @foreach (string status in Model.AvailableStatuses)
+                        {
+                            if (status == Model.Status)
+                            {
+                                <option value="@status" selected>@status</option>
+                            }
+                            else
+                            {
+                                <option value="@status">@status</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="complaint-edit-field">
+                    <label for="AssignedTo">Toegewezen aan</label>
+                    <select id="AssignedTo" name="AssignedTo">
+                        @foreach (string assignee in Model.AvailableAssignees)
+                        {
+                            if (assignee == Model.AssignedTo)
+                            {
+                                <option value="@assignee" selected>@assignee</option>
+                            }
+                            else
+                            {
+                                <option value="@assignee">@assignee</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="complaint-edit-field">
+                    <label for="Channel">Kanaal</label>
+                    <input id="Channel" name="Channel" value="@Model.Channel" />
+                </div>
+
+                <div class="complaint-edit-field">
+                    <label for="City">Stad</label>
+                    <input id="City" name="City" value="@Model.City" />
+                </div>
+
+                <div class="complaint-edit-field">
+                    <label for="ResolutionDeadline">Deadline</label>
+                    <input id="ResolutionDeadline" name="ResolutionDeadline" type="date" value="@Model.ResolutionDeadline.ToString("yyyy-MM-dd")" />
+                </div>
+
+                <div class="complaint-edit-field complaint-edit-field--full">
+                    <label for="Summary">Samenvatting</label>
+                    <textarea id="Summary" name="Summary" rows="3">@Model.Summary</textarea>
+                </div>
+
+                <div class="complaint-edit-field complaint-edit-field--full">
+                    <label for="Description">Omschrijving</label>
+                    <textarea id="Description" name="Description" rows="8">@Model.Description</textarea>
+                </div>
+            </div>
+
+            <button type="submit">Wijzigingen opslaan</button>
+        </form>
+    </div>
+</section>

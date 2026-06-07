@@ -1,6 +1,278 @@
-﻿@{
+﻿@model KE03_INTDEV_SE_2_Base.ViewModels.ComplaintIndexViewModel
+
+@{
     ViewData["Title"] = "Klachten";
+
+    string ToggleDirection(string column)
+    {
+        if (Model.SortBy == column && Model.SortDirection == "asc")
+        {
+            return "desc";
+        }
+
+        return "asc";
+    }
+
+    string BadgeClassForStatus(string status) => status.ToLowerInvariant() switch
+    {
+        "open" => "complaint-status complaint-status--new",
+        "in behandeling" => "complaint-status complaint-status--progress",
+        "wacht op klant" => "complaint-status complaint-status--waiting",
+        "gesloten" => "complaint-status complaint-status--closed",
+        _ => "complaint-status"
+    };
+
+    string BadgeClassForPriority(string priority) => priority.ToLowerInvariant() switch
+    {
+        "urgent" => "complaint-priority complaint-priority--urgent",
+        "hoog" => "complaint-priority complaint-priority--high",
+        "normaal" => "complaint-priority complaint-priority--normal",
+        "laag" => "complaint-priority complaint-priority--low",
+        _ => "complaint-priority"
+    };
 }
 
-<h1>Klachten</h1>
-<p>Hier komt later het klachtenoverzicht.</p>
+<section class="products-page complaints-page">
+    <div class="page-header">
+        <h1>Klachten</h1>
+
+        <form method="get" asp-controller="Complaints" asp-action="Index" class="product-search complaint-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" value="@Model.Search" placeholder="Zoek klacht..." />
+
+            <input type="hidden" name="statusFilter" value="@Model.StatusFilter" />
+            <input type="hidden" name="categoryFilter" value="@Model.CategoryFilter" />
+            <input type="hidden" name="sortBy" value="@Model.SortBy" />
+            <input type="hidden" name="sortDirection" value="@Model.SortDirection" />
+        </form>
+    </div>
+
+    <div class="order-summary-grid">
+        <div class="order-summary-card">
+            <span>Totaal klachten</span>
+            <strong>@Model.TotalComplaints</strong>
+        </div>
+
+        <div class="order-summary-card">
+            <span>Open klachten</span>
+            <strong>@Model.OpenComplaints</strong>
+        </div>
+
+        <div class="order-summary-card">
+            <span>Urgente klachten</span>
+            <strong>@Model.UrgentComplaints</strong>
+        </div>
+    </div>
+
+    <div class="product-actions complaint-actions">
+        <form method="get" asp-controller="Complaints" asp-action="Index" class="filter-form complaint-filter-form">
+            <input type="hidden" name="search" value="@Model.Search" />
+            <input type="hidden" name="sortBy" value="@Model.SortBy" />
+            <input type="hidden" name="sortDirection" value="@Model.SortDirection" />
+
+            <select name="statusFilter">
+                @if (Model.StatusFilter == "all")
+                {
+                    <option value="all" selected>Alle statussen</option>
+                }
+                else
+                {
+                    <option value="all">Alle statussen</option>
+                }
+
+                @foreach (string status in Model.StatusOptions)
+                {
+                    if (Model.StatusFilter == status)
+                    {
+                        <option value="@status" selected>@status</option>
+                    }
+                    else
+                    {
+                        <option value="@status">@status</option>
+                    }
+                }
+            </select>
+
+            <select name="categoryFilter">
+                @if (Model.CategoryFilter == "all")
+                {
+                    <option value="all" selected>Alle categorieën</option>
+                }
+                else
+                {
+                    <option value="all">Alle categorieën</option>
+                }
+
+                @foreach (string category in Model.CategoryOptions)
+                {
+                    if (Model.CategoryFilter == category)
+                    {
+                        <option value="@category" selected>@category</option>
+                    }
+                    else
+                    {
+                        <option value="@category">@category</option>
+                    }
+                }
+            </select>
+
+            <button type="submit" class="btn-black">Filteren</button>
+        </form>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Search) || Model.StatusFilter != "all" || Model.CategoryFilter != "all")
+        {
+            <a asp-controller="Complaints"
+               asp-action="Index"
+               asp-route-sortBy="@Model.SortBy"
+               asp-route-sortDirection="@Model.SortDirection"
+               class="btn-light">
+                Alles tonen
+            </a>
+        }
+    </div>
+
+    <div class="product-table-wrapper complaints-table-wrapper">
+        <table class="product-table complaint-table">
+            <thead>
+                <tr>
+                    <th>
+                        <a asp-controller="Complaints"
+                           asp-action="Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-statusFilter="@Model.StatusFilter"
+                           asp-route-categoryFilter="@Model.CategoryFilter"
+                           asp-route-sortBy="klacht"
+                           asp-route-sortDirection="@ToggleDirection("klacht")">
+                            Klacht <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+
+                    <th>
+                        <a asp-controller="Complaints"
+                           asp-action="Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-statusFilter="@Model.StatusFilter"
+                           asp-route-categoryFilter="@Model.CategoryFilter"
+                           asp-route-sortBy="klant"
+                           asp-route-sortDirection="@ToggleDirection("klant")">
+                            Klant <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+
+                    <th>
+                        <a asp-controller="Complaints"
+                           asp-action="Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-statusFilter="@Model.StatusFilter"
+                           asp-route-categoryFilter="@Model.CategoryFilter"
+                           asp-route-sortBy="datum"
+                           asp-route-sortDirection="@ToggleDirection("datum")">
+                            Datum <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+
+                    <th>
+                        <a asp-controller="Complaints"
+                           asp-action="Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-statusFilter="@Model.StatusFilter"
+                           asp-route-categoryFilter="@Model.CategoryFilter"
+                           asp-route-sortBy="categorie"
+                           asp-route-sortDirection="@ToggleDirection("categorie")">
+                            Categorie <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+
+                    <th>
+                        <a asp-controller="Complaints"
+                           asp-action="Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-statusFilter="@Model.StatusFilter"
+                           asp-route-categoryFilter="@Model.CategoryFilter"
+                           asp-route-sortBy="prioriteit"
+                           asp-route-sortDirection="@ToggleDirection("prioriteit")">
+                            Prioriteit <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+
+                    <th>
+                        <a asp-controller="Complaints"
+                           asp-action="Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-statusFilter="@Model.StatusFilter"
+                           asp-route-categoryFilter="@Model.CategoryFilter"
+                           asp-route-sortBy="status"
+                           asp-route-sortDirection="@ToggleDirection("status")">
+                            Status <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+
+                    <th>Bestelling</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.Complaints.Any())
+                {
+                    foreach (var complaint in Model.Complaints)
+                    {
+                        <tr class="clickable-row"
+                            onclick="window.location='@Url.Action("Details", "Complaints", new { id = complaint.Id })'">
+                            <td class="product-name">#@complaint.Id</td>
+                            <td>
+                                <div class="complaint-customer">
+                                    <strong>@complaint.CustomerName</strong>
+                                    <span>@complaint.City</span>
+                                </div>
+                            </td>
+                            <td>@complaint.ComplaintDate.ToString("dd-MM-yyyy")</td>
+                            <td>@complaint.Category</td>
+                            <td><span class="@BadgeClassForPriority(complaint.Priority)">@complaint.Priority</span></td>
+                            <td><span class="order-status">@complaint.Status</span></td>
+                            <td>
+                                @if (complaint.OrderId.HasValue)
+                                {
+                                    <a asp-controller="Orders" asp-action="Details" asp-route-id="@complaint.OrderId" class="complaint-order-link">
+                                        #@complaint.OrderId
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="complaint-order-link complaint-order-link--empty">Geen koppeling</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="empty-table">
+                            Geen klachten gevonden.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <div class="pagination">
+            @for (int pageNumber = 1; pageNumber <= Model.TotalPages; pageNumber++)
+            {
+                <a class="page-number @(Model.CurrentPage == pageNumber ? "active" : "")"
+                   asp-controller="Complaints"
+                   asp-action="Index"
+                   asp-route-page="@pageNumber"
+                   asp-route-search="@Model.Search"
+                   asp-route-statusFilter="@Model.StatusFilter"
+                   asp-route-categoryFilter="@Model.CategoryFilter"
+                   asp-route-sortBy="@Model.SortBy"
+                   asp-route-sortDirection="@Model.SortDirection">
+                    @pageNumber
+                </a>
+            }
+        </div>
+    }
+</section>

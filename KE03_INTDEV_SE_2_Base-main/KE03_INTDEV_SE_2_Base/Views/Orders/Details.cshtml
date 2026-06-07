@@ -1,0 +1,140 @@
+﻿@model KE03_INTDEV_SE_2_Base.ViewModels.OrderDetailsViewModel
+
+@{
+    ViewData["Title"] = "Bestelling details";
+}
+
+<section class="products-page">
+    <div class="detail-back-row">
+        <a asp-controller="Orders" asp-action="Index" class="btn-light">
+            <i class="fa-solid fa-arrow-left"></i>
+            Terug naar overzicht
+        </a>
+    </div>
+
+    <div class="page-header">
+        <h1>Bestelling #@Model.Id</h1>
+    </div>
+
+    <div class="order-detail-grid">
+        <div class="order-detail-card">
+            <h2>Klantgegevens</h2>
+
+            <dl class="order-detail-list">
+                <dt>Klant</dt>
+                <dd>@Model.CustomerName</dd>
+
+                <dt>Naam</dt>
+                <dd>@Model.FullName</dd>
+
+                <dt>Besteldatum</dt>
+                <dd>@Model.OrderDate.ToString("dd-MM-yyyy")</dd>
+            </dl>
+        </div>
+
+        <div class="order-detail-card">
+            <h2>Adres en totaal</h2>
+
+            <dl class="order-detail-list">
+                <dt>Adres</dt>
+                <dd>@Model.AddressLine</dd>
+
+                <dt>Postcode en stad</dt>
+                <dd>@Model.PostalCode @Model.City</dd>
+
+                <dt>Totaal</dt>
+                <dd>€ @Model.TotalPrice.ToString("0.00")</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="order-status-panel">
+        <div class="order-status-panel-header">
+            <div>
+                <h2>Status en bezorging</h2>
+                <p>Volg en wijzig hier de afhandeling van deze bestelling.</p>
+            </div>
+
+            <span class="order-status">@Model.Status</span>
+        </div>
+
+        <form asp-controller="Orders" asp-action="UpdateStatus" method="post" class="order-status-form">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="id" value="@Model.Id" />
+
+            <div>
+                <label for="status">Nieuwe status</label>
+
+                <select id="status" name="status">
+                    @foreach (string status in Model.AvailableStatuses)
+                    {
+                        if (status == Model.Status)
+                        {
+                            <option value="@status" selected>@status</option>
+                        }
+                        else
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <button type="submit">Status opslaan</button>
+        </form>
+
+        <div class="order-tracking-grid">
+            <div>
+                <span>Huidige status</span>
+                <strong>@Model.Status</strong>
+            </div>
+
+            <div>
+                <span>Track & trace</span>
+                <strong>@Model.TrackAndTraceCode</strong>
+            </div>
+
+            <div>
+                <span>Verwachte levering</span>
+                <strong>@Model.ExpectedDeliveryDate.ToString("dd-MM-yyyy")</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-table-wrapper">
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Aantal</th>
+                    <th>Prijs per stuk</th>
+                    <th>Subtotaal</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.Items.Any())
+                {
+                    foreach (OrderItemViewModel item in Model.Items)
+                    {
+                        <tr>
+                            <td class="product-name">@item.ProductName</td>
+                            <td>@item.Amount</td>
+                            <td>€ @item.PriceAtOrder.ToString("0.00")</td>
+                            <td>€ @item.Subtotal.ToString("0.00")</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="empty-table">
+                            Deze bestelling heeft geen producten.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>

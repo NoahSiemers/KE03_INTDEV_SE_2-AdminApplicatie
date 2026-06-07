@@ -1,6 +1,160 @@
-﻿@{
+﻿@model KE03_INTDEV_SE_2_Base.ViewModels.OrderIndexViewModel
+
+@{
     ViewData["Title"] = "Bestellingen";
+
+    string ToggleDirection(string column)
+    {
+        if (Model.SortBy == column && Model.SortDirection == "asc")
+        {
+            return "desc";
+        }
+
+        return "asc";
+    }
 }
 
-<h1>Bestellingen</h1>
-<p>Hier komt later het bestellingenoverzicht.</p>
+<section class="products-page">
+    <div class="page-header">
+        <h1>Bestellingen</h1>
+
+        <form method="get" asp-controller="Orders" asp-action="Index" class="product-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" value="@Model.Search" placeholder="Zoek bestelling..." />
+
+            <input type="hidden" name="sortBy" value="@Model.SortBy" />
+            <input type="hidden" name="sortDirection" value="@Model.SortDirection" />
+        </form>
+    </div>
+
+    <div class="order-summary-grid">
+        <div class="order-summary-card">
+            <span>Totaal bestellingen</span>
+            <strong>@Model.TotalOrders</strong>
+        </div>
+
+        <div class="order-summary-card">
+            <span>Totale orderwaarde</span>
+            <strong>€ @Model.TotalRevenue.ToString("0.00")</strong>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Search))
+    {
+        <a asp-controller="Orders"
+           asp-action="Index"
+           asp-route-sortBy="@Model.SortBy"
+           asp-route-sortDirection="@Model.SortDirection"
+           class="show-all-products">
+            Alle bestellingen tonen
+        </a>
+    }
+
+    <div class="product-table-wrapper">
+        <table class="product-table order-table">
+            <thead>
+                <tr>
+                    <th>
+                        <a asp-controller="Orders"
+                           asp-action="Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-sortBy="order"
+                           asp-route-sortDirection="@ToggleDirection("order")">
+                            Order <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+
+                    <th>
+                        <a asp-controller="Orders"
+                           asp-action="Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-sortBy="klant"
+                           asp-route-sortDirection="@ToggleDirection("klant")">
+                            Klant <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+
+                    <th>
+                        <a asp-controller="Orders"
+                           asp-action="Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-sortBy="datum"
+                           asp-route-sortDirection="@ToggleDirection("datum")">
+                            Datum <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+
+                    <th>Producten</th>
+                    <th>Status</th>
+
+                    <th>
+                        <a asp-controller="Orders"
+                           asp-action="Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-sortBy="stad"
+                           asp-route-sortDirection="@ToggleDirection("stad")">
+                            Stad <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+
+                    <th>
+                        <a asp-controller="Orders"
+                           asp-action="Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-sortBy="totaal"
+                           asp-route-sortDirection="@ToggleDirection("totaal")">
+                            Totaal <i class="fa-solid fa-angle-up"></i>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.Orders.Any())
+                {
+                    foreach (OrderListItemViewModel order in Model.Orders)
+                    {
+                        <tr class="clickable-row"
+                            onclick="window.location='@Url.Action("Details", "Orders", new { id = order.Id })'">
+                            <td class="product-name">#@order.Id</td>
+                            <td>@order.CustomerName</td>
+                            <td>@order.OrderDate.ToString("dd-MM-yyyy")</td>
+                            <td>@order.TotalItems stuks</td>
+                            <td>
+                                <span class="order-status">@order.Status</span>
+                            </td>
+                            <td>@order.City</td>
+                            <td>€ @order.TotalPrice.ToString("0.00")</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="empty-table">
+                            Geen bestellingen gevonden.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <div class="pagination">
+            @for (int pageNumber = 1; pageNumber <= Model.TotalPages; pageNumber++)
+            {
+                <a class="page-number @(Model.CurrentPage == pageNumber ? "active" : "")"
+                   asp-controller="Orders"
+                   asp-action="Index"
+                   asp-route-page="@pageNumber"
+                   asp-route-search="@Model.Search"
+                   asp-route-sortBy="@Model.SortBy"
+                   asp-route-sortDirection="@Model.SortDirection">
+                    @pageNumber
+                </a>
+            }
+        </div>
+    }
+</section>
