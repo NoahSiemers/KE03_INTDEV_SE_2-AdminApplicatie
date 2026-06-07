@@ -2,6 +2,7 @@ using DataAccessLayer;
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
+using KE03_INTDEV_SE_2_Base.Services;
 
 namespace KE03_INTDEV_SE_2_Base
 {
@@ -17,6 +18,10 @@ namespace KE03_INTDEV_SE_2_Base
             builder.Services.AddDbContext<MatrixIncDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpClient<IExternalOrderService, DummyJsonOrderService>(client =>
+            {
+                client.BaseAddress = new Uri("https://dummyjson.com/");
+            });
 
             // We registreren de repositories in de DI container
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
