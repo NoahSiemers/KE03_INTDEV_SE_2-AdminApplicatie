@@ -23,8 +23,10 @@ namespace KE03_INTDEV_SE_2_Base
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IPartRepository, PartRepository>();
+			builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+			builder.Services.AddScoped<IFunctionRepository, FunctionRepository>();
 
-            var app = builder.Build();
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -40,8 +42,9 @@ namespace KE03_INTDEV_SE_2_Base
                 var services = scope.ServiceProvider;
 
                 var context = services.GetRequiredService<MatrixIncDbContext>();
-                context.Database.EnsureCreated();
-                MatrixIncDbInitializer.Initialize(context);
+				context.Database.EnsureCreated();
+
+				MatrixIncDbInitializer.Initialize(context);
             }
 
             app.UseHttpsRedirection();

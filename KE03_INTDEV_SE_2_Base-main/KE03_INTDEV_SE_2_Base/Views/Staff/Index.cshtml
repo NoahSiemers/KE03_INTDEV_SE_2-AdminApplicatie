@@ -1,0 +1,66 @@
+﻿@model KE03_INTDEV_SE_2_Base.ViewModels.StaffIndexViewModel
+
+@{
+    ViewData["Title"] = "Personeel";
+}
+
+<section class="products-page">
+    <div class="page-header">
+        <h1>Personeel</h1>
+
+        <form method="get" asp-action="Index" class="product-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" value="@Model.Search" placeholder="Zoek medewerker..." />
+        </form>
+    </div>
+
+    <div class="product-actions">
+        <a asp-action="Create" class="btn-black">
+            + Nieuwe medewerker
+        </a>
+    </div>
+
+    <div class="product-table-wrapper">
+        <table class="product-table">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Voornaam</th>
+                    <th>Achternaam</th>
+                    <th>Email</th>
+                    <th>Functie</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.StaffMembers.Any())
+                {
+                    @foreach (var staff in Model.StaffMembers)
+                    {
+                        <tr class="clickable-row"
+                            onclick="window.location='@Url.Action("Edit", new { id = staff.StaffId })'">
+                            <td>#@staff.StaffId</td>
+                            <td>@staff.FirstName</td>
+                            <td>@staff.LastName</td>
+                            <td>@staff.Email</td>
+                            <td>@staff.Function?.Name</td>
+                            <td>@(staff.Active ? "Actief" : "Inactief")</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="empty-table">
+                            Geen medewerkers gevonden.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+</section>

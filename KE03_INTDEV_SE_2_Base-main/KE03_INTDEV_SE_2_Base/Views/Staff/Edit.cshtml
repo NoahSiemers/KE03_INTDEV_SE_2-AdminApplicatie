@@ -1,0 +1,72 @@
+﻿@model KE03_INTDEV_SE_2_Base.ViewModels.StaffViewModel
+
+@{
+    ViewData["Title"] = "Medewerker bewerken";
+}
+
+<section class="create-product-page">
+    <div class="create-header">
+        <div>
+            <h1>Medewerker bewerken</h1>
+            <p>Pas de gegevens van deze medewerker aan.</p>
+        </div>
+    </div>
+
+    <form asp-controller="Staff" asp-action="Edit" method="post" class="create-product-form">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="StaffId" />
+
+        <div class="top-form-actions">
+            <a asp-controller="Staff" asp-action="Index" class="btn-light">
+                Terug
+            </a>
+            <button type="submit" class="btn-black">
+                Opslaan
+            </button>
+        </div>
+
+        <div class="form-card">
+            <h2>Medewerker informatie</h2>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label asp-for="FirstName">Voornaam</label>
+                    <input asp-for="FirstName" />
+                    <span asp-validation-for="FirstName"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="LastName">Achternaam</label>
+                    <input asp-for="LastName" />
+                    <span asp-validation-for="LastName"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email">E-mailadres</label>
+                    <input asp-for="Email" />
+                    <span asp-validation-for="Email"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FunctionId">Functie</label>
+                    <select asp-for="FunctionId" asp-items="Model.Functions">
+                        <option value="">-- Kies een functie --</option>
+                    </select>
+                    <span asp-validation-for="FunctionId"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Active">Status</label>
+                    <select asp-for="Active">
+                        <option value="true">Actief</option>
+                        <option value="false">Inactief</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,71 @@
+﻿@model KE03_INTDEV_SE_2_Base.ViewModels.StaffViewModel
+
+@{
+    ViewData["Title"] = "Nieuwe medewerker";
+}
+
+<section class="create-product-page">
+    <div class="create-header">
+        <div>
+            <h1>Nieuwe medewerker</h1>
+            <p>Voeg een nieuwe medewerker toe aan het beheersysteem.</p>
+        </div>
+    </div>
+
+    <form asp-controller="Staff" asp-action="Create" method="post" class="create-product-form">
+        @Html.AntiForgeryToken()
+
+        <div class="top-form-actions">
+            <a asp-controller="Staff" asp-action="Index" class="btn-light">
+                Terug
+            </a>
+            <button type="submit" class="btn-black">
+                Opslaan
+            </button>
+        </div>
+
+        <div class="form-card">
+            <h2>Medewerker informatie</h2>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label asp-for="FirstName">Voornaam</label>
+                    <input asp-for="FirstName" placeholder="Bijv. Jan" />
+                    <span asp-validation-for="FirstName"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="LastName">Achternaam</label>
+                    <input asp-for="LastName" placeholder="Bijv. de Vries" />
+                    <span asp-validation-for="LastName"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email">E-mailadres</label>
+                    <input asp-for="Email" placeholder="Bijv. jan@matrixinc.nl" />
+                    <span asp-validation-for="Email"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FunctionId">Functie</label>
+                    <select asp-for="FunctionId" asp-items="Model.Functions">
+                        <option value="">-- Kies een functie --</option>
+                    </select>
+                    <span asp-validation-for="FunctionId"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Active">Status</label>
+                    <select asp-for="Active">
+                        <option value="true">Actief</option>
+                        <option value="false">Inactief</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

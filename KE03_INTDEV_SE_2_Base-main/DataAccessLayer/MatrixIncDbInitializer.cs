@@ -91,8 +91,25 @@ namespace DataAccessLayer
             };
             context.ProductSpecifications.AddRange(productSpecifications);
 
+			var functions = new Function[]
+            {
+	            new Function { Name = "Manager" },
+	            new Function { Name = "Magazijnmedewerker" },
+	            new Function { Name = "Verkoop" },
+	            new Function { Name = "Administratie" },
+	            new Function { Name = "IT" }
+            };
+			context.Functions.AddRange(functions);
 
-            context.SaveChanges();
+			var staff = new Staff[]
+			{
+	        new Staff { FirstName = "Jan", LastName = "de Vries", Email = "jan@matrixinc.nl", Function = functions[0], Active = true },
+	        new Staff { FirstName = "Lisa", LastName = "Bakker", Email = "lisa@matrixinc.nl", Function = functions[2], Active = true },
+	        new Staff { FirstName = "Tom", LastName = "Janssen", Email = "tom@matrixinc.nl", Function = functions[1], Active = false }
+			};
+			context.Staff.AddRange(staff);
+
+			context.SaveChanges();
 
             context.Database.EnsureCreated();
         }
