@@ -1,9 +1,9 @@
 using DataAccessLayer.Interfaces;
 using KE03_INTDEV_SE_2_Base.Models;
+using KE03_INTDEV_SE_2_Base.Services;
 using KE03_INTDEV_SE_2_Base.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Text.Json;
 
 namespace KE03_INTDEV_SE_2_Base.Controllers
 {
@@ -11,24 +11,38 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IProductRepository _productRepository;
+        private readonly IExternalOrderService _orderService;
 
-        public HomeController(ILogger<HomeController> logger, IProductRepository productRepository)
+        public HomeController(
+            ILogger<HomeController> logger,
+            IProductRepository productRepository,
+            IExternalOrderService orderService)
         {
             _logger = logger;
             _productRepository = productRepository;
+            _orderService = orderService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             const int lowStockLimit = 7;
 
-            var viewModel = new HomeIndexViewModel
+            List<OrderListItemViewModel> orders = await _orderService.GetOrdersAsync();
+
+            List<OrderListItemViewModel> openOrders = orders
+                .Where(order => order.Status != "Afgeleverd")
+                .Take(5)
+                .ToList();
+
+            ViewBag.OpenOrders = openOrders;
+
+            HomeIndexViewModel viewModel = new HomeIndexViewModel
             {
                 WelcomeText = "Welkom",
                 DateText = DateTime.Now.ToString("dddd d MMMM yyyy"),
                 LowStockProducts = _productRepository.GetAllProducts()
-                    .Where(p => p.Stock <= lowStockLimit)
-                    .OrderBy(p => p.Stock)
+                    .Where(product => product.Stock <= lowStockLimit)
+                    .OrderBy(product => product.Stock)
                     .ToList()
             };
 
@@ -43,7 +57,12 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ErrorViewModel viewModel = new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+
+            return View(viewModel);
         }
     }
 }

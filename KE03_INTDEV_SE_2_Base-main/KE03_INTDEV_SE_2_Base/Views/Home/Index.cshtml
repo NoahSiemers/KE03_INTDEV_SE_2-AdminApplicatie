@@ -1,7 +1,10 @@
 ﻿@model KE03_INTDEV_SE_2_Base.ViewModels.HomeIndexViewModel
+@using KE03_INTDEV_SE_2_Base.ViewModels
 
 @{
     ViewData["Title"] = "Home";
+
+    List<OrderListItemViewModel> openOrders = ViewBag.OpenOrders as List<OrderListItemViewModel> ?? new List<OrderListItemViewModel>();
 }
 
 <section class="dashboard-page">
@@ -27,12 +30,33 @@
             </a>
 
             <div class="panel-content">
-                <p class="empty-text">Er zijn nog geen openstaande bestellingen.</p>
+                @if (openOrders.Any())
+                {
+                    <div class="panel-list">
+                        @foreach (OrderListItemViewModel order in openOrders)
+                        {
+                            <a class="panel-list-item"
+                               asp-controller="Orders"
+                               asp-action="Details"
+                               asp-route-id="@order.Id">
+                                <strong>#@order.Id - @order.CustomerName</strong>
+                                <span>Status: @order.Status</span>
+                            </a>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="empty-text">Er zijn geen openstaande bestellingen.</p>
+                }
             </div>
         </article>
 
         <article class="dashboard-panel">
-            <a class="panel-title" asp-controller="Products" asp-action="Index" asp-action="Index" asp-route-lowStockOnly="true">
+            <a class="panel-title"
+               asp-controller="Products"
+               asp-action="Index"
+               asp-route-lowStockOnly="true">
                 Producten
             </a>
 
