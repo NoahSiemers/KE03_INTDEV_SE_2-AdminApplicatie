@@ -51,7 +51,7 @@
     }
 
     <div class="product-table-wrapper">
-        <table class="product-table">
+        <table class="product-table order-table">
             <thead>
                 <tr>
                     <th>
@@ -85,6 +85,7 @@
                     </th>
 
                     <th>Producten</th>
+                    <th>Status</th>
 
                     <th>
                         <a asp-controller="Orders"
@@ -105,8 +106,6 @@
                             Totaal <i class="fa-solid fa-angle-up"></i>
                         </a>
                     </th>
-
-                    <th>Actie</th>
                 </tr>
             </thead>
 
@@ -115,21 +114,17 @@
                 {
                     foreach (OrderListItemViewModel order in Model.Orders)
                     {
-                        <tr>
+                        <tr class="clickable-row"
+                            onclick="window.location='@Url.Action("Details", "Orders", new { id = order.Id })'">
                             <td class="product-name">#@order.Id</td>
                             <td>@order.CustomerName</td>
                             <td>@order.OrderDate.ToString("dd-MM-yyyy")</td>
                             <td>@order.TotalItems stuks</td>
+                            <td>
+                                <span class="order-status">@order.Status</span>
+                            </td>
                             <td>@order.City</td>
                             <td>€ @order.TotalPrice.ToString("0.00")</td>
-                            <td>
-                                <a asp-controller="Orders"
-                                   asp-action="Details"
-                                   asp-route-id="@order.Id"
-                                   class="table-action-link">
-                                    Details
-                                </a>
-                            </td>
                         </tr>
                     }
                 }

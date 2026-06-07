@@ -20,6 +20,14 @@
 
         public decimal TotalPrice { get; set; }
 
+        public string Status { get; set; } = string.Empty;
+
+        public string TrackAndTraceCode { get; set; } = string.Empty;
+
+        public DateTime ExpectedDeliveryDate { get; set; }
+
+        public List<string> AvailableStatuses { get; set; } = new List<string>();
+
         public List<OrderItemViewModel> Items { get; set; } = new List<OrderItemViewModel>();
     }
 }

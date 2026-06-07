@@ -688,16 +688,31 @@ body {
         font-weight: 800;
     }
 
-.table-action-link {
-    color: #000;
-    font-weight: 700;
-    text-decoration: none;
+.order-table tbody tr {
+    cursor: pointer;
+    transition: background-color 0.15s ease;
 }
 
-    .table-action-link:hover {
-        color: #000;
-        text-decoration: underline;
+    .order-table tbody tr:hover {
+        background-color: #f8fafc;
     }
+
+.order-status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background-color: #eef2ff;
+    color: #1e3a8a;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.detail-back-row {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 18px;
+}
 
 .order-detail-grid {
     display: grid;
@@ -739,6 +754,104 @@ body {
         font-size: 14px;
     }
 
+.order-status-panel {
+    background-color: white;
+    border: 1px solid #dce1e8;
+    border-radius: 7px;
+    padding: 22px;
+    margin-bottom: 24px;
+}
+
+.order-status-panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.order-status-panel h2 {
+    margin: 0 0 6px;
+    color: #000;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.order-status-panel p {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.order-status-form {
+    display: flex;
+    align-items: end;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+    .order-status-form label {
+        display: block;
+        margin-bottom: 6px;
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .order-status-form select {
+        min-width: 260px;
+        height: 42px;
+        border: 1px solid #dce1e8;
+        border-radius: 7px;
+        padding: 0 12px;
+        background-color: white;
+        color: #111827;
+        font-size: 14px;
+    }
+
+    .order-status-form button {
+        height: 42px;
+        border: none;
+        border-radius: 7px;
+        padding: 0 16px;
+        background-color: #111827;
+        color: white;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+        .order-status-form button:hover {
+            background-color: #000;
+        }
+
+.order-tracking-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+    .order-tracking-grid div {
+        border: 1px solid #e5e7eb;
+        border-radius: 7px;
+        padding: 16px;
+        background-color: #f8fafc;
+    }
+
+    .order-tracking-grid span {
+        display: block;
+        margin-bottom: 8px;
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .order-tracking-grid strong {
+        color: #111827;
+        font-size: 15px;
+        font-weight: 800;
+    }
+
 @media (max-width: 850px) {
     .order-summary-grid,
     .order-detail-grid {
@@ -746,6 +859,24 @@ body {
     }
 
     .order-detail-list {
+        grid-template-columns: 1fr;
+    }
+
+    .order-status-panel-header {
+        flex-direction: column;
+    }
+
+    .order-status-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+        .order-status-form select,
+        .order-status-form button {
+            width: 100%;
+        }
+
+    .order-tracking-grid {
         grid-template-columns: 1fr;
     }
 }

@@ -5,13 +5,15 @@
 }
 
 <section class="products-page">
-    <div class="page-header">
-        <h1>Bestelling #@Model.Id</h1>
-
+    <div class="detail-back-row">
         <a asp-controller="Orders" asp-action="Index" class="btn-light">
             <i class="fa-solid fa-arrow-left"></i>
             Terug naar overzicht
         </a>
+    </div>
+
+    <div class="page-header">
+        <h1>Bestelling #@Model.Id</h1>
     </div>
 
     <div class="order-detail-grid">
@@ -46,6 +48,60 @@
         </div>
     </div>
 
+    <div class="order-status-panel">
+        <div class="order-status-panel-header">
+            <div>
+                <h2>Status en bezorging</h2>
+                <p>Volg en wijzig hier de afhandeling van deze bestelling.</p>
+            </div>
+
+            <span class="order-status">@Model.Status</span>
+        </div>
+
+        <form asp-controller="Orders" asp-action="UpdateStatus" method="post" class="order-status-form">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="id" value="@Model.Id" />
+
+            <div>
+                <label for="status">Nieuwe status</label>
+
+                <select id="status" name="status">
+                    @foreach (string status in Model.AvailableStatuses)
+                    {
+                        if (status == Model.Status)
+                        {
+                            <option value="@status" selected>@status</option>
+                        }
+                        else
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <button type="submit">Status opslaan</button>
+        </form>
+
+        <div class="order-tracking-grid">
+            <div>
+                <span>Huidige status</span>
+                <strong>@Model.Status</strong>
+            </div>
+
+            <div>
+                <span>Track & trace</span>
+                <strong>@Model.TrackAndTraceCode</strong>
+            </div>
+
+            <div>
+                <span>Verwachte levering</span>
+                <strong>@Model.ExpectedDeliveryDate.ToString("dd-MM-yyyy")</strong>
+            </div>
+        </div>
+    </div>
+
     <div class="product-table-wrapper">
         <table class="product-table">
             <thead>
@@ -74,7 +130,7 @@
                 {
                     <tr>
                         <td colspan="4" class="empty-table">
-                            Deze bestelling heeft nog geen producten.
+                            Deze bestelling heeft geen producten.
                         </td>
                     </tr>
                 }

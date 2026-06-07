@@ -72,6 +72,15 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateStatus(int id, string status)
+        {
+            await _orderService.UpdateOrderStatusAsync(id, status);
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
         private IEnumerable<OrderListItemViewModel> FilterOrders(
             IEnumerable<OrderListItemViewModel> orders,
             string? search)
@@ -86,7 +95,8 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return orders.Where(order =>
                 ContainsText(order.Id.ToString(), searchValue) ||
                 ContainsText(order.CustomerName, searchValue) ||
-                ContainsText(order.City, searchValue));
+                ContainsText(order.City, searchValue) ||
+                ContainsText(order.Status, searchValue));
         }
 
         private IEnumerable<OrderListItemViewModel> SortOrders(
@@ -109,6 +119,10 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
                 "stad" => descending
                     ? orders.OrderByDescending(order => order.City)
                     : orders.OrderBy(order => order.City),
+
+                "status" => descending
+                    ? orders.OrderByDescending(order => order.Status)
+                    : orders.OrderBy(order => order.Status),
 
                 "totaal" => descending
                     ? orders.OrderByDescending(order => order.TotalPrice)
