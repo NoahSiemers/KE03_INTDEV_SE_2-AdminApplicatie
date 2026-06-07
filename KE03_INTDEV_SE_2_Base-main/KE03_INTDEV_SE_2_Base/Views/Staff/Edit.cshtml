@@ -1,0 +1,54 @@
+﻿@model KE03_INTDEV_SE_2_Base.ViewModels.StaffViewModel
+
+<h1>Medewerker bewerken</h1>
+
+<form asp-action="Edit" method="post">
+
+
+    <input asp-for="StaffId" type="hidden" />
+
+    <div class="mb-3">
+        <label asp-for="FirstName">Voornaam</label>
+        <input asp-for="FirstName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LastName">Achternaam</label>
+        <input asp-for="LastName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email">E-mailadres</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+
+        <label asp-for="FunctionId">Functie</label>
+
+        <select asp-for="FunctionId"
+                asp-items="Model.Functions"
+                class="form-select">
+        </select>
+
+    </div>
+
+    <div class="form-check mb-3">
+
+        <input asp-for="Active"
+               class="form-check-input" />
+
+        <label asp-for="Active"
+               class="form-check-label">
+
+            Actief
+
+        </label>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Opslaan
+    </button>
+
+</form>

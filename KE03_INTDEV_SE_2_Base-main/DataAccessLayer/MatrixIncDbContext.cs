@@ -18,8 +18,10 @@ namespace DataAccessLayer
         public DbSet<FavoriteProduct> FavoriteProducts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+		public DbSet<Staff> Staff { get; set; }
+		public DbSet<Function> Functions { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Customer>()
                 .HasMany(c => c.Orders)

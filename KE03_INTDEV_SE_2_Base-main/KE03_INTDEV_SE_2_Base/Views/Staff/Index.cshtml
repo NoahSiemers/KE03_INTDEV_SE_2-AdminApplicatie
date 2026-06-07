@@ -1,0 +1,65 @@
+﻿@model KE03_INTDEV_SE_2_Base.ViewModels.StaffIndexViewModel
+
+@{
+    ViewData["Title"] = "Personeel";
+}
+
+<h1>Personeel</h1>
+
+<div class="d-flex justify-content-between mb-3">
+
+    <form method="get" asp-action="Index">
+
+        <input type="text"
+               name="search"
+               value="@Model.Search"
+               placeholder="Zoek medewerker..." />
+
+        <button type="submit">
+            Zoeken
+        </button>
+
+    </form>
+
+    <a asp-action="Create" class="btn btn-primary">
+        Nieuwe medewerker
+    </a>
+
+</div>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Voornaam</th>
+            <th>Achternaam</th>
+            <th>Email</th>
+            <th>Functie</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var staff in Model.StaffMembers)
+        {
+            <tr onclick="window.location='@Url.Action("Edit", new { id = staff.StaffId })'"
+                style="cursor:pointer">
+
+                <td>@staff.StaffId</td>
+                <td>@staff.FirstName</td>
+                <td>@staff.LastName</td>
+                <td>@staff.Email</td>
+                <td>@staff.Function?.Name</td>
+
+                <td>
+                    @(staff.Active ? "Actief" : "Inactief")
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>

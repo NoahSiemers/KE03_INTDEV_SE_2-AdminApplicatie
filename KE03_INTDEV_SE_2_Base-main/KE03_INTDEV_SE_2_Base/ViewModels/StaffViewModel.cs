@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace KE03_INTDEV_SE_2_Base.ViewModels
 {
@@ -16,6 +17,8 @@ namespace KE03_INTDEV_SE_2_Base.ViewModels
 
 		public bool Active { get; set; }
 
+		[ValidateNever]
 		public List<SelectListItem> Functions { get; set; } = [];
+
 	}
 }
