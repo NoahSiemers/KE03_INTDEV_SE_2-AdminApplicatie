@@ -12,22 +12,26 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IProductRepository _productRepository;
         private readonly IExternalOrderService _orderService;
+        private readonly IComplaintService _complaintService;
 
         public HomeController(
             ILogger<HomeController> logger,
             IProductRepository productRepository,
-            IExternalOrderService orderService)
+            IExternalOrderService orderService,
+            IComplaintService complaintService)
         {
             _logger = logger;
             _productRepository = productRepository;
             _orderService = orderService;
+            _complaintService = complaintService;
         }
 
         public async Task<IActionResult> Index()
         {
             const int lowStockLimit = 7;
 
-            List<OrderListItemViewModel> orders = await _orderService.GetOrdersAsync();
+            List<OrderListItemViewModel> orders =
+                await _orderService.GetOrdersAsync();
 
             List<OrderListItemViewModel> openOrders = orders
                 .Where(order => order.Status != "Afgeleverd")
@@ -35,6 +39,14 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
                 .ToList();
 
             ViewBag.OpenOrders = openOrders;
+
+            List<ComplaintListItemViewModel> openComplaints =
+            (await _complaintService.GetComplaintsAsync())
+            .Where(c => c.Status != "Gesloten")
+            .Take(5)
+            .ToList();
+
+            ViewBag.OpenComplaints = openComplaints;
 
             HomeIndexViewModel viewModel = new HomeIndexViewModel
             {

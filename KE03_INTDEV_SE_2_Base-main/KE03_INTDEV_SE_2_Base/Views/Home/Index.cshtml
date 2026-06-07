@@ -1,10 +1,12 @@
 ﻿@model KE03_INTDEV_SE_2_Base.ViewModels.HomeIndexViewModel
 @using KE03_INTDEV_SE_2_Base.ViewModels
+@using KE03_INTDEV_SE_2_Base.Services;
 
 @{
     ViewData["Title"] = "Home";
 
     List<OrderListItemViewModel> openOrders = ViewBag.OpenOrders as List<OrderListItemViewModel> ?? new List<OrderListItemViewModel>();
+    List<ComplaintListItemViewModel> openComplaints = ViewBag.OpenComplaints as List<ComplaintListItemViewModel> ?? new List<ComplaintListItemViewModel>();
 }
 
 <section class="dashboard-page">
@@ -20,7 +22,25 @@
             </a>
 
             <div class="panel-content">
-                <p class="empty-text">Er zijn nog geen nieuwe klachten.</p>
+                @if (openComplaints.Any())
+                {
+                    <div class="panel-list">
+                        @foreach (ComplaintListItemViewModel complaint in openComplaints)
+                        {
+                            <a class="panel-list-item"
+                               asp-controller="Complaints"
+                               asp-action="Details"
+                               asp-route-id="@complaint.Id">
+                                <strong>#@complaint.Id - @complaint.CustomerName</strong>
+                                <span>Status: @complaint.Status</span>
+                            </a>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="empty-text">Er zijn nog geen open klachten.</p>
+                }
             </div>
         </article>
 

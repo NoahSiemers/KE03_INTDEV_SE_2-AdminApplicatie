@@ -880,3 +880,46 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+.complaint-edit-card {
+    margin-top: 24px;
+}
+
+.complaint-edit-form {
+    width: 100%;
+}
+
+.complaint-edit-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.complaint-edit-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+.complaint-edit-field--full {
+    grid-column: 1 / -1;
+}
+
+.complaint-edit-field input,
+.complaint-edit-field select,
+.complaint-edit-field textarea {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.complaint-edit-field textarea {
+    resize: vertical;
+}
+
+@media (max-width: 768px) {
+    .complaint-edit-grid {
+        grid-template-columns: 1fr;
+    }
+}
