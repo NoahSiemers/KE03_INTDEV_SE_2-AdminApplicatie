@@ -48,6 +48,44 @@
         </div>
     </div>
 
+    @if (Model.ContainsLowStockProduct)
+    {
+        <div class="low-stock-warning clickable-warning"
+             onclick="openLowStockProducts()">
+
+            <h3 style="color:#dc2626;">
+                ⚠ Product(en) met lage voorraad
+            </h3>
+
+            <p>
+                Deze bestelling bevat producten met een lage voorraad.
+                <strong>Klik hier om de producten te openen.</strong>
+            </p>
+
+            <ul>
+                @foreach (var product in Model.LowStockProducts)
+                {
+                    <li>@product.ProductName</li>
+                }
+            </ul>
+        </div>
+
+        <script>
+                function openLowStockProducts() {
+
+                    @foreach (var product in Model.LowStockProducts)
+                    {
+                            <text>
+                                window.open('@Url.Action("Details", "Products", new { id = product.ProductId })','_blank');
+                            </text>
+                    }
+
+                }
+        </script>
+    }
+
+    <br/>
+
     <div class="order-status-panel">
         <div class="order-status-panel-header">
             <div>

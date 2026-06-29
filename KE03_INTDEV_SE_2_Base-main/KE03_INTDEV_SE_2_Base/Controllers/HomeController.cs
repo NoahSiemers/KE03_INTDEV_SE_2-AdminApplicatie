@@ -1,4 +1,5 @@
 using DataAccessLayer.Interfaces;
+using DataAccessLayer.Models;
 using KE03_INTDEV_SE_2_Base.Models;
 using KE03_INTDEV_SE_2_Base.Services;
 using KE03_INTDEV_SE_2_Base.ViewModels;
@@ -29,33 +30,52 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
         public async Task<IActionResult> Index()
         {
             const int lowStockLimit = 7;
+            
+            // Products with low stock
+            List<Product> lowStockProducts = _productRepository.GetAllProducts()
+                .Where(product => product.Stock <= lowStockLimit)
+                .OrderBy(product => product.Stock)
+                .ToList();
 
-            List<OrderListItemViewModel> orders =
-                await _orderService.GetOrdersAsync();
+            // All current orders
+            List<OrderListItemViewModel> orders = await _orderService.GetOrdersAsync();
+
+            // Assume order id matches product id
+            bool lowStockOrderExists = orders.Any(order =>
+                lowStockProducts.Any(product => product.Id == order.Id));
 
             List<OrderListItemViewModel> openOrders = orders
                 .Where(order => order.Status != "Afgeleverd")
+                .OrderBy(order =>
+                    order.Status == "Ontvangen" ? 0 :
+                    order.Status == "Klaar voor verzenden" ? 1 :
+                    order.Status == "Kan worden opgehaald" ? 2 :
+                    order.Status == "Wordt bezorgd" ? 3 : 4)
+                .ThenBy(order => order.OrderDate)
                 .Take(5)
                 .ToList();
 
             ViewBag.OpenOrders = openOrders;
 
-            List<ComplaintListItemViewModel> openComplaints =
-            (await _complaintService.GetComplaintsAsync())
-            .Where(c => c.Status != "Gesloten")
-            .Take(5)
-            .ToList();
+            List<ComplaintListItemViewModel> openComplaints = await _complaintService.GetComplaintsAsync();
+
+            openComplaints = openComplaints
+                .OrderBy(c => c.Status == "Open" ? 0 :
+                              c.Status == "In behandeling" ? 1 :
+                              c.Status == "Wacht op klant" ? 2 : 3)
+                .ThenBy(c => c.ComplaintDate)
+                .Take(5)
+                .ToList();
 
             ViewBag.OpenComplaints = openComplaints;
+
+            ViewBag.LowStockOrderExists = lowStockOrderExists;
 
             HomeIndexViewModel viewModel = new HomeIndexViewModel
             {
                 WelcomeText = "Welkom",
                 DateText = DateTime.Now.ToString("dddd d MMMM yyyy"),
-                LowStockProducts = _productRepository.GetAllProducts()
-                    .Where(product => product.Stock <= lowStockLimit)
-                    .OrderBy(product => product.Stock)
-                    .ToList()
+                LowStockProducts = lowStockProducts
             };
 
             return View(viewModel);

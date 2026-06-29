@@ -29,5 +29,9 @@
         public List<string> AvailableStatuses { get; set; } = new List<string>();
 
         public List<OrderItemViewModel> Items { get; set; } = new List<OrderItemViewModel>();
+
+        public bool ContainsLowStockProduct { get; set; }
+
+        public List<OrderLowStockProductViewModel> LowStockProducts { get; set; } = new();
     }
 }

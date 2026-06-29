@@ -7,12 +7,58 @@
 
     List<OrderListItemViewModel> openOrders = ViewBag.OpenOrders as List<OrderListItemViewModel> ?? new List<OrderListItemViewModel>();
     List<ComplaintListItemViewModel> openComplaints = ViewBag.OpenComplaints as List<ComplaintListItemViewModel> ?? new List<ComplaintListItemViewModel>();
+    bool lowStockOrderExists = ViewBag.LowStockOrderExists ?? false;
 }
 
 <section class="dashboard-page">
     <div class="dashboard-header">
         <p>Welkom</p>
         <span>@Model.DateText</span>
+    </div>
+
+    <div class="dashboard-alerts">
+
+        <div class="dashboard-alert alert-yellow">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+            <div>
+                <strong>Onafgehandelde klachten</strong>
+                <span>Er zijn nog klachten die open staan.</span>
+            </div>
+        </div>
+
+        @if (lowStockOrderExists)
+        {
+            <div class="dashboard-alert alert-red">
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+                <div>
+                    <strong>Bestelling met lage voorraad</strong>
+                    <span>Er is een bestelling geplaatst voor een product met weinig voorraad.</span>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="dashboard-alert alert-blue">
+                <i class="fa-solid fa-truck"></i>
+
+                <div>
+                    <strong>Op schema</strong>
+                    <span>Alle bestellingen kunnen zonder voorraadproblemen worden verwerkt.</span>
+                </div>
+            </div>
+        }
+
+        <div class="dashboard-alert alert-red">
+            <i class="fa-solid fa-box-open"></i>
+
+            <div>
+                <strong>Lage voorraad</strong>
+                <span>Er is een tekort aan voorraad, bestel nieuwe producten.</span>
+            </div>
+        </div>
+
     </div>
 
     <div class="dashboard-grid">
@@ -61,6 +107,13 @@
                                asp-route-id="@order.Id">
                                 <strong>#@order.Id - @order.CustomerName</strong>
                                 <span>Status: @order.Status</span>
+
+                                @if (order.ContainsLowStockProduct)
+                                {
+                                    <span style="color:#dc2626;font-weight:700;">
+                                        ⚠ Bevat product met lage voorraad
+                                    </span>
+                                }
                             </a>
                         }
                     </div>
@@ -88,8 +141,8 @@
                         {
                             <a class="panel-list-item"
                                asp-controller="Products"
-                               asp-action="Index"
-                               asp-route-lowStockOnly="true">
+                               asp-action="Edit"
+                               asp-route-id="@product.Id">
                                 <strong>@product.Name</strong>
                                 <span>@product.Stock stuks op voorraad</span>
                             </a>

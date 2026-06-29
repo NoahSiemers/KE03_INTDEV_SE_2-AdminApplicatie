@@ -1,4 +1,5 @@
-﻿using KE03_INTDEV_SE_2_Base.Dtos;
+﻿using DataAccessLayer.Interfaces;
+using KE03_INTDEV_SE_2_Base.Dtos;
 using KE03_INTDEV_SE_2_Base.ViewModels;
 using System.Net.Http.Json;
 
@@ -6,9 +7,17 @@ namespace KE03_INTDEV_SE_2_Base.Services
 {
     public class DummyJsonOrderService : IExternalOrderService
     {
-        private static readonly Dictionary<int, string> OrderStatuses = new Dictionary<int, string>();
+        private static readonly Dictionary<int, string> OrderStatuses = new();
 
-        private static readonly List<string> AvailableStatuses = new List<string>
+        // Demo products that are considered low on stock.
+        private static readonly HashSet<int> LowStockProductIds = new()
+        {
+            78,
+            101,
+            144
+        };
+
+        private static readonly List<string> AvailableStatuses = new()
         {
             "Ontvangen",
             "Klaar voor verzenden",
@@ -26,25 +35,23 @@ namespace KE03_INTDEV_SE_2_Base.Services
 
         public async Task<List<OrderListItemViewModel>> GetOrdersAsync()
         {
-            DummyJsonCartResponseDto? response = await _httpClient
-                .GetFromJsonAsync<DummyJsonCartResponseDto>("carts");
+            DummyJsonCartResponseDto? response =
+                await _httpClient.GetFromJsonAsync<DummyJsonCartResponseDto>("carts");
 
             if (response == null)
             {
                 return new List<OrderListItemViewModel>();
             }
 
-            List<OrderListItemViewModel> orders = response.Carts
+            return response.Carts
                 .Select(CreateOrderListItemViewModel)
                 .ToList();
-
-            return orders;
         }
 
         public async Task<OrderDetailsViewModel?> GetOrderByIdAsync(int id)
         {
-            DummyJsonCartDto? cart = await _httpClient
-                .GetFromJsonAsync<DummyJsonCartDto>($"carts/{id}");
+            DummyJsonCartDto? cart =
+                await _httpClient.GetFromJsonAsync<DummyJsonCartDto>($"carts/{id}");
 
             if (cart == null)
             {
@@ -73,6 +80,9 @@ namespace KE03_INTDEV_SE_2_Base.Services
 
         private OrderListItemViewModel CreateOrderListItemViewModel(DummyJsonCartDto cart)
         {
+            List<OrderLowStockProductViewModel> lowStockProducts =
+                GetLowStockProducts(cart.Id, cart.Products);
+
             return new OrderListItemViewModel
             {
                 Id = cart.Id,
@@ -81,7 +91,9 @@ namespace KE03_INTDEV_SE_2_Base.Services
                 City = "Niet beschikbaar",
                 TotalItems = cart.TotalQuantity,
                 TotalPrice = cart.Total,
-                Status = GetOrderStatus(cart.Id)
+                Status = GetOrderStatus(cart.Id),
+
+                ContainsLowStockProduct = lowStockProducts.Any()
             };
         }
 
@@ -96,6 +108,9 @@ namespace KE03_INTDEV_SE_2_Base.Services
                     Subtotal = product.Total
                 })
                 .ToList();
+
+            List<OrderLowStockProductViewModel> lowStockProducts =
+                GetLowStockProducts(cart.Id, cart.Products);
 
             DateTime orderDate = CreateDemoDate(cart.Id);
 
@@ -114,8 +129,46 @@ namespace KE03_INTDEV_SE_2_Base.Services
                 TrackAndTraceCode = CreateTrackAndTraceCode(cart.Id, cart.UserId),
                 ExpectedDeliveryDate = orderDate.AddDays(3 + cart.Id % 3),
                 AvailableStatuses = AvailableStatuses,
-                Items = items
+                Items = items,
+
+                ContainsLowStockProduct = lowStockProducts.Any(),
+                LowStockProducts = lowStockProducts
             };
+        }
+
+        private List<OrderLowStockProductViewModel> GetLowStockProducts(
+        int orderId,
+        IEnumerable<DummyJsonCartProductDto> products)
+        {
+            List<OrderLowStockProductViewModel> result = new();
+
+            // Demo data
+
+            if (orderId == 1)
+            {
+                result.Add(new OrderLowStockProductViewModel
+                {
+                    ProductId = 78,
+                    ProductName = "Apple MacBook Air"
+                });
+            }
+
+            if (orderId == 4)
+            {
+                result.Add(new OrderLowStockProductViewModel
+                {
+                    ProductId = 101,
+                    ProductName = "Apple AirPods Max Silver"
+                });
+
+                result.Add(new OrderLowStockProductViewModel
+                {
+                    ProductId = 144,
+                    ProductName = "Crushed Velvet Sofa"
+                });
+            }
+
+            return result;
         }
 
         private string GetOrderStatus(int orderId)
