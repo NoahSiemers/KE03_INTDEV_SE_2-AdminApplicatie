@@ -5,9 +5,14 @@
 @{
     ViewData["Title"] = "Home";
 
-    List<OrderListItemViewModel> openOrders = ViewBag.OpenOrders as List<OrderListItemViewModel> ?? new List<OrderListItemViewModel>();
+    List<OrderListItemViewModel> openOrders =
+        ViewBag.OpenOrders as List<OrderListItemViewModel>
+        ?? new List<OrderListItemViewModel>();
     List<ComplaintListItemViewModel> openComplaints = ViewBag.OpenComplaints as List<ComplaintListItemViewModel> ?? new List<ComplaintListItemViewModel>();
-    bool lowStockOrderExists = ViewBag.LowStockOrderExists ?? false;
+
+    string complaintAlertColor = ViewBag.ComplaintAlertColor ?? "blue";
+    string orderAlertColor = ViewBag.OrderAlertColor ?? "blue";
+    string productAlertColor = ViewBag.ProductAlertColor ?? "blue";
 }
 
 <section class="dashboard-page">
@@ -18,44 +23,43 @@
 
     <div class="dashboard-alerts">
 
-        <div class="dashboard-alert alert-yellow">
+        <div class="dashboard-alert alert-@complaintAlertColor">
             <i class="fa-solid fa-triangle-exclamation"></i>
 
             <div>
                 <strong>Onafgehandelde klachten</strong>
-                <span>Er zijn nog klachten die open staan.</span>
+                <span>@ViewBag.OpenComplaintCount open klachten</span>
             </div>
         </div>
 
-        @if (lowStockOrderExists)
-        {
-            <div class="dashboard-alert alert-red">
-                <i class="fa-solid fa-circle-exclamation"></i>
+        <div class="dashboard-alert alert-@orderAlertColor">
+            <i class="fa-solid fa-truck"></i>
 
-                <div>
-                    <strong>Bestelling met lage voorraad</strong>
-                    <span>Er is een bestelling geplaatst voor een product met weinig voorraad.</span>
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="dashboard-alert alert-blue">
-                <i class="fa-solid fa-truck"></i>
-
-                <div>
+            <div>
+                @if ((string)ViewBag.OrderAlertColor == "red")
+                {
+                    <strong>Nieuwe bestellingen</strong>
+                    <span>@ViewBag.ReceivedOrders bestellingen wachten op verwerking.</span>
+                }
+                else if ((string)ViewBag.OrderAlertColor == "yellow")
+                {
+                    <strong>Nieuwe bestellingen</strong>
+                    <span>@ViewBag.ReceivedOrders bestellingen wachten op verwerking.</span>
+                }
+                else
+                {
                     <strong>Op schema</strong>
-                    <span>Alle bestellingen kunnen zonder voorraadproblemen worden verwerkt.</span>
-                </div>
+                    <span>Er zijn geen nieuwe bestellingen.</span>
+                }
             </div>
-        }
+        </div>
 
-        <div class="dashboard-alert alert-red">
+        <div class="dashboard-alert alert-@productAlertColor">
             <i class="fa-solid fa-box-open"></i>
 
             <div>
-                <strong>Lage voorraad</strong>
-                <span>Er is een tekort aan voorraad, bestel nieuwe producten.</span>
+                <strong>Voorraadstatus</strong>
+                <span>@ViewBag.ProductAlertText</span>
             </div>
         </div>
 
@@ -107,13 +111,6 @@
                                asp-route-id="@order.Id">
                                 <strong>#@order.Id - @order.CustomerName</strong>
                                 <span>Status: @order.Status</span>
-
-                                @if (order.ContainsLowStockProduct)
-                                {
-                                    <span style="color:#dc2626;font-weight:700;">
-                                        ⚠ Bevat product met lage voorraad
-                                    </span>
-                                }
                             </a>
                         }
                     </div>

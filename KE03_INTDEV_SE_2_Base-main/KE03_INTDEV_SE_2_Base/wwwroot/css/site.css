@@ -993,3 +993,30 @@ body {
         margin: 8px 0 0;
         padding-left: 20px;
     }
+
+/* order editing checkboxes */
+.packed-checkbox {
+    accent-color: #dc2626;
+}
+
+    .packed-checkbox:checked {
+        accent-color: #16a34a;
+    }
+
+.packed-toggle input {
+    display: none;
+}
+
+.packed-toggle i {
+    font-size: 24px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.packed-toggle .fa-square-xmark {
+    color: #dc2626;
+}
+
+.packed-toggle .fa-square-check {
+    color: #16a34a;
+}

@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Interfaces;
+using DataAccessLayer.Models;
 using KE03_INTDEV_SE_2_Base.Dtos;
 using KE03_INTDEV_SE_2_Base.ViewModels;
 using System.Net.Http.Json;
@@ -8,14 +9,7 @@ namespace KE03_INTDEV_SE_2_Base.Services
     public class DummyJsonOrderService : IExternalOrderService
     {
         private static readonly Dictionary<int, string> OrderStatuses = new();
-
-        // Demo products that are considered low on stock.
-        private static readonly HashSet<int> LowStockProductIds = new()
-        {
-            78,
-            101,
-            144
-        };
+        private static readonly Dictionary<string, bool> PackedProducts = new();
 
         private static readonly List<string> AvailableStatuses = new()
         {
@@ -105,7 +99,8 @@ namespace KE03_INTDEV_SE_2_Base.Services
                     ProductName = product.Title,
                     Amount = product.Quantity,
                     PriceAtOrder = product.Price,
-                    Subtotal = product.Total
+                    Subtotal = product.Total,
+                    IsPacked = GetPackedState(cart.Id, product.Title)
                 })
                 .ToList();
 
@@ -186,6 +181,21 @@ namespace KE03_INTDEV_SE_2_Base.Services
         private string CreateTrackAndTraceCode(int orderId, int userId)
         {
             return $"MX-{userId:D3}-{orderId:D5}";
+        }
+
+        private bool GetPackedState(int orderId, string productName)
+        {
+            string key = $"{orderId}-{productName}";
+
+            return PackedProducts.TryGetValue(key, out bool value) && value;
+        }
+
+        public Task UpdatePackedStateAsync(int orderId, string productName, bool packed)
+        {
+            string key = $"{orderId}-{productName}";
+            PackedProducts[key] = packed;
+
+            return Task.CompletedTask;
         }
 
         private DateTime CreateDemoDate(int orderId)

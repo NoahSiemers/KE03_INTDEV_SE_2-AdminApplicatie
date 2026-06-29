@@ -48,44 +48,6 @@
         </div>
     </div>
 
-    @if (Model.ContainsLowStockProduct)
-    {
-        <div class="low-stock-warning clickable-warning"
-             onclick="openLowStockProducts()">
-
-            <h3 style="color:#dc2626;">
-                ⚠ Product(en) met lage voorraad
-            </h3>
-
-            <p>
-                Deze bestelling bevat producten met een lage voorraad.
-                <strong>Klik hier om de producten te openen.</strong>
-            </p>
-
-            <ul>
-                @foreach (var product in Model.LowStockProducts)
-                {
-                    <li>@product.ProductName</li>
-                }
-            </ul>
-        </div>
-
-        <script>
-                function openLowStockProducts() {
-
-                    @foreach (var product in Model.LowStockProducts)
-                    {
-                            <text>
-                                window.open('@Url.Action("Details", "Products", new { id = product.ProductId })','_blank');
-                            </text>
-                    }
-
-                }
-        </script>
-    }
-
-    <br/>
-
     <div class="order-status-panel">
         <div class="order-status-panel-header">
             <div>
@@ -117,6 +79,18 @@
                         }
                     }
                 </select>
+
+                <label for="depo">Depo</label>
+
+                <select id="depo" name="depo">
+                    
+                </select>
+
+                <label for="region">Regio</label>
+
+                <select id="region" name="region">
+
+                </select>
             </div>
 
             <button type="submit">Status opslaan</button>
@@ -145,6 +119,7 @@
             <thead>
                 <tr>
                     <th>Product</th>
+                    <th>Ingepakt</th>
                     <th>Aantal</th>
                     <th>Prijs per stuk</th>
                     <th>Subtotaal</th>
@@ -158,6 +133,21 @@
                     {
                         <tr>
                             <td class="product-name">@item.ProductName</td>
+
+                            <td>
+                                <label class="packed-toggle">
+
+                                    <input type="checkbox"
+                                           class="packed-checkbox"
+                                           data-order="@Model.Id"
+                                           data-product="@item.ProductName"
+                                    @(item.IsPacked ? "checked" : "") />
+
+                                    <i class="fa-solid @(item.IsPacked ? "fa-square-check" : "fa-square-xmark")"></i>
+
+                                </label>
+                            </td>
+
                             <td>@item.Amount</td>
                             <td>€ @item.PriceAtOrder.ToString("0.00")</td>
                             <td>€ @item.Subtotal.ToString("0.00")</td>
@@ -175,4 +165,47 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+
+        document.querySelectorAll(".packed-checkbox").forEach(box => {
+
+            const icon = box.nextElementSibling;
+
+            function updateIcon(){
+
+                if(box.checked){
+
+                    icon.className="fa-solid fa-square-check";
+
+                }else{
+
+                    icon.className="fa-solid fa-square-xmark";
+
+                }
+
+            }
+
+            updateIcon();
+
+            box.addEventListener("change", async function(){
+
+                updateIcon();
+
+                const formData = new FormData();
+
+                formData.append("orderId", this.dataset.order);
+                formData.append("productName", this.dataset.product);
+                formData.append("packed", this.checked);
+
+                await fetch("/Orders/UpdatePackedState",{
+                    method:"POST",
+                    body:formData
+                });
+
+            });
+
+        });
+
+    </script>
 </section>

@@ -73,7 +73,17 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        // [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdatePackedState(
+        int orderId,
+        string productName,
+        bool packed)
+            {
+                await _orderService.UpdatePackedStateAsync(orderId, productName, packed);
+
+                return Ok();
+            }
+
         public async Task<IActionResult> UpdateStatus(int id, string status)
         {
             await _orderService.UpdateOrderStatusAsync(id, status);

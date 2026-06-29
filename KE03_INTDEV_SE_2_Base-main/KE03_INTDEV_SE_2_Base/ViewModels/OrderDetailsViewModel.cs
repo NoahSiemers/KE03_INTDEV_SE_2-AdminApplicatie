@@ -33,5 +33,10 @@
         public bool ContainsLowStockProduct { get; set; }
 
         public List<OrderLowStockProductViewModel> LowStockProducts { get; set; } = new();
+
+        public int PackedAmount { get; set; }
+
+        public int TotalOrdered =>
+            Items?.Sum(i => i.Amount) ?? 0;
     }
 }
