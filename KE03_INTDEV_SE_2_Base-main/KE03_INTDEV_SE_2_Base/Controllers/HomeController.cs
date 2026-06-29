@@ -45,15 +45,24 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
                 lowStockProducts.Any(product => product.Id == order.Id));
 
             List<OrderListItemViewModel> openOrders = orders
-                .Where(order => order.Status != "Afgeleverd")
-                .OrderBy(order =>
-                    order.Status == "Ontvangen" ? 0 :
-                    order.Status == "Klaar voor verzenden" ? 1 :
-                    order.Status == "Kan worden opgehaald" ? 2 :
-                    order.Status == "Wordt bezorgd" ? 3 : 4)
-                .ThenBy(order => order.OrderDate)
-                .Take(5)
-                .ToList();
+            .Where(order => order.Status != "Afgeleverd")
+
+            // Orders containing low stock products first
+            .OrderByDescending(order => order.ContainsLowStockProduct)
+
+            // Then sort by status priority
+            .ThenBy(order =>
+                order.Status == "Ontvangen" ? 0 :
+                order.Status == "Klaar voor verzenden" ? 1 :
+                order.Status == "Kan worden opgehaald" ? 2 :
+                order.Status == "Wordt bezorgd" ? 3 :
+                4)
+
+            // Then oldest orders first
+            .ThenBy(order => order.OrderDate)
+
+            .Take(5)
+            .ToList();
 
             ViewBag.OpenOrders = openOrders;
 
