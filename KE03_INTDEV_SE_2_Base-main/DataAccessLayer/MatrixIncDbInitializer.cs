@@ -97,8 +97,9 @@ namespace DataAccessLayer
 	            new Function { Name = "Magazijnmedewerker" },
 	            new Function { Name = "Verkoop" },
 	            new Function { Name = "Administratie" },
-	            new Function { Name = "IT" }
-            };
+	            new Function { Name = "IT" },
+                new Function { Name = "Bezorger" }
+			};
 			context.Functions.AddRange(functions);
 
 			var staff = new Staff[]
