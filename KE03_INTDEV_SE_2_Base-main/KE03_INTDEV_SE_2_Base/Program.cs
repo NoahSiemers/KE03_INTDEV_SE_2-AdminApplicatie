@@ -28,6 +28,11 @@ namespace KE03_INTDEV_SE_2_Base
             {
                 client.BaseAddress = new Uri("https://dummyjson.com/");
             });
+            builder.Services.AddHttpClient<IQuoteService, DummyJsonQuoteService>(client =>
+            {
+                client.BaseAddress = new Uri("https://dummyjson.com/");
+                client.Timeout = TimeSpan.FromSeconds(3);
+            });
 
             builder.Services.AddScoped<IComplaintService, DummyComplaintService>();
 

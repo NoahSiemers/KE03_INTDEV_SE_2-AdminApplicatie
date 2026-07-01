@@ -1020,3 +1020,11 @@ body {
 .packed-toggle .fa-square-check {
     color: #16a34a;
 }
+
+.dashboard-quote-line {
+    display: block;
+    margin-top: 6px;
+    color: #8b95a7;
+    font-size: 14px;
+    font-style: italic;
+}

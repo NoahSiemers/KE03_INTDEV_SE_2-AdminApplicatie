@@ -14,17 +14,20 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
         private readonly IProductRepository _productRepository;
         private readonly IExternalOrderService _orderService;
         private readonly IComplaintService _complaintService;
+        private readonly IQuoteService _quoteService;
 
         public HomeController(
             ILogger<HomeController> logger,
             IProductRepository productRepository,
             IExternalOrderService orderService,
-            IComplaintService complaintService)
+            IComplaintService complaintService,
+            IQuoteService quoteService)
         {
             _logger = logger;
             _productRepository = productRepository;
             _orderService = orderService;
             _complaintService = complaintService;
+            _quoteService = quoteService;
         }
 
         public async Task<IActionResult> Index()
@@ -78,11 +81,14 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
                 .GetAllProducts()
                 .ToList();
 
+            DashboardQuoteViewModel dashboardQuote = await _quoteService.GetRandomQuoteAsync();
+
             HomeIndexViewModel viewModel = new HomeIndexViewModel
             {
                 WelcomeText = "Welkom",
                 DateText = DateTime.Now.ToString("dddd d MMMM yyyy"),
-                LowStockProducts = lowStockProducts
+                LowStockProducts = lowStockProducts,
+                Quote = dashboardQuote
             };
 
             // Complaint alert

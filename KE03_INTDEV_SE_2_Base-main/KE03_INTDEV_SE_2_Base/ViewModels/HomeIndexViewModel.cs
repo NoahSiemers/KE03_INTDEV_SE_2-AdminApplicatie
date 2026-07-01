@@ -9,5 +9,7 @@ namespace KE03_INTDEV_SE_2_Base.ViewModels
         public string DateText { get; set; } = string.Empty;
 
         public List<Product> LowStockProducts { get; set; } = new();
+
+        public DashboardQuoteViewModel Quote { get; set; } = new();
     }
 }
