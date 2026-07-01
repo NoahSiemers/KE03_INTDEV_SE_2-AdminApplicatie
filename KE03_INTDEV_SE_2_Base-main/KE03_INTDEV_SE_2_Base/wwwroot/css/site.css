@@ -277,24 +277,6 @@ body {
         background-color: #111;
     }
 
-.btn-red {
-    display: inline-flex;
-    align-items: center;
-    height: 42px;
-    padding: 0 17px;
-    background-color: red;
-    color: white;
-    border-radius: 7px;
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 700;
-}
-
-    .btn-red:hover {
-        color: white;
-        background-color: #111;
-    }
-
 .filter-form {
     display: flex;
     gap: 8px;
