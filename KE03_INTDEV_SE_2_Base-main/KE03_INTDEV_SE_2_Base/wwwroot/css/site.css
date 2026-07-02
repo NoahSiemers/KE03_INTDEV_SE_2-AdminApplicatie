@@ -1028,3 +1028,44 @@ body {
     font-size: 14px;
     font-style: italic;
 }
+
+/* Under construction page styling */
+/* Under construction page */
+.under-construction-page {
+    position: relative;
+    min-height: calc(100vh - 76px);
+}
+
+.back-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+    .back-button:hover {
+        opacity: 0.9;
+    }
+
+.under-construction-content {
+    min-height: calc(100vh - 76px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+    .under-construction-content h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 800;
+        color: #111827;
+    }
