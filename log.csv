@@ -1,12 +1,25 @@
-67a6d52,Flebles,"Sun, 7 Jun 2026 22:19:56 +0200",add complaints + details (half done),"	 13 files changed", 985 insertions(+)," 13 deletions(-)	"
-87a693a,Berat Avcı,"Sun, 7 Jun 2026 20:40:05 +0200",home page bestelgedeelte,"	 2 files changed", 54 insertions(+)," 11 deletions(-)	"
-686b451,Milan Schoenmakers,"Sun, 7 Jun 2026 20:20:55 +0200",Veranderen van font en tekstposities,"	 3 files changed", 195 insertions(+)," 160 deletions(-)	"
-b4347ae,Berat Avcı,"Sun, 7 Jun 2026 20:20:41 +0200",Improve orders status and detail navigation,"	 8 files changed", 292 insertions(+)," 30 deletions(-)	"
-7dcfab8,Milan Schoenmakers,"Sun, 7 Jun 2026 19:43:49 +0200",Applicatie laten werken + layout,"	 14 files changed", 437 insertions(+)," 8 deletions(-)	"
-a45135d,Berat Avcı,"Sun, 7 Jun 2026 19:19:12 +0200",Add external API orders feature,"	 16 files changed", 707 insertions(+)," 9 deletions(-)	"
-efcaaf8,Milan Schoenmakers,"Sun, 7 Jun 2026 17:01:33 +0200",Classes + ViewModels,"	 5 files changed", 75 insertions(+)," 2 deletions(-)	"
-4cdcb9a,NoahSiemers,"Fri, 5 Jun 2026 22:22:56 +0200",Producten,"	 19 files changed", 1587 insertions(+)," 268 deletions(-)	"
-e28111c,Flebles,"Thu, 4 Jun 2026 11:05:08 +0200",fix home button URL,"	 1 file changed", 2 insertions(+)," 2 deletions(-)	"
-84f825e,NoahSiemers,"Wed, 3 Jun 2026 18:30:54 +0200",Update Navbar,"	 2 files changed", 167 insertions(+)," 20 deletions(-)	"
-62558fd,NoahSiemers,"Wed, 3 Jun 2026 18:09:56 +0200",Begin home pagina,"	 117 files changed"," 76382 insertions(+)	",
-6fb6bdc,Noah Siemers,"Wed, 3 Jun 2026 17:58:59 +0200",Initial commit,"	 1 file changed"," 2 insertions(+)	",
+d5e04a4,Flebles,6 minutes ago,add under construction page for not-yet-existing pages
+d611c61,Milan Schoenmakers,58 minutes ago,Dummy filter knop toegevoegd bij personeel
+c7f338a,Flebles,5 hours ago,fixed red checkbox appearance and updated flow for packaging, setting status and depo/region
+357d9d2,NoahSiemers,19 hours ago,Quote API
+e91e141,Flebles,3 days ago,rename placeholder sidebar option "Medewerkers" to "Retour"
+ce0e60b,Flebles,3 days ago,fix issues with priority cards and add ability to check products as packaged, and placeholder dropdowns for depo and region
+76f96ff,Milan Schoenmakers,3 days ago,add dummy button employee archiving
+7ac1e97,Flebles,3 days ago,update Orders home list to always put low stock at the top
+6ccd49a,Flebles,3 days ago,add priority/status cards above each list in home
+e162575,Flebles,2 weeks ago,fix complaints icon
+39352e2,Flebles,3 weeks ago,commit log
+e94a010,Flebles,4 weeks ago,Merge branch 'new-complaints-page'
+67a6d52,Flebles,4 weeks ago,add complaints + details (half done)
+7c91321,Milan Schoenmakers,4 weeks ago,Font aangepast
+87a693a,Berat Avcı,4 weeks ago,home page bestelgedeelte
+686b451,Milan Schoenmakers,4 weeks ago,Veranderen van font en tekstposities
+b4347ae,Berat Avcı,4 weeks ago,Improve orders status and detail navigation
+7dcfab8,Milan Schoenmakers,4 weeks ago,Applicatie laten werken + layout
+a45135d,Berat Avcı,4 weeks ago,Add external API orders feature
+efcaaf8,Milan Schoenmakers,4 weeks ago,Classes + ViewModels
+4cdcb9a,NoahSiemers,4 weeks ago,Producten
+e28111c,Flebles,4 weeks ago,fix home button URL
+84f825e,NoahSiemers,4 weeks ago,Update Navbar
+62558fd,NoahSiemers,4 weeks ago,Begin home pagina
+6fb6bdc,Noah Siemers,4 weeks ago,Initial commit
