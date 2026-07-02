@@ -1,7 +1,9 @@
-d5e04a4,Flebles,6 minutes ago,add under construction page for not-yet-existing pages
-d611c61,Milan Schoenmakers,58 minutes ago,Dummy filter knop toegevoegd bij personeel
-c7f338a,Flebles,5 hours ago,fixed red checkbox appearance and updated flow for packaging, setting status and depo/region
-357d9d2,NoahSiemers,19 hours ago,Quote API
+0d2acfe,Milan Schoenmakers,76 seconds ago,Archiveren andere kleur + Bijbestellen toegevoegd
+189b7b8,Flebles,2 hours ago,Update log.csv
+d5e04a4,Flebles,2 hours ago,add under construction page for not-yet-existing pages
+d611c61,Milan Schoenmakers,3 hours ago,Dummy filter knop toegevoegd bij personeel
+c7f338a,Flebles,6 hours ago,fixed red checkbox appearance and updated flow for packaging, setting status and depo/region
+357d9d2,NoahSiemers,21 hours ago,Quote API
 e91e141,Flebles,3 days ago,rename placeholder sidebar option "Medewerkers" to "Retour"
 ce0e60b,Flebles,3 days ago,fix issues with priority cards and add ability to check products as packaged, and placeholder dropdowns for depo and region
 76f96ff,Milan Schoenmakers,3 days ago,add dummy button employee archiving
