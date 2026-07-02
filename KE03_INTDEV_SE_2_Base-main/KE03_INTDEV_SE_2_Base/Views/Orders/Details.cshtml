@@ -143,7 +143,7 @@
                                            data-product="@item.ProductName"
                                     @(item.IsPacked ? "checked" : "") />
 
-                                    <i class="fa-solid @(item.IsPacked ? "fa-square-check" : "fa-square-xmark")"></i>
+                                    <i class="fa-solid @(item.IsPacked ? "fa-square-check" : "fa-square")"></i>
 
                                 </label>
                             </td>
@@ -167,45 +167,86 @@
     </div>
 
     <script>
+        const packedCheckboxes = document.querySelectorAll(".packed-checkbox");
+        const statusSelect = document.getElementById("status");
+        const depoSelect = document.getElementById("depo");
+        const regionSelect = document.getElementById("region");
 
-        document.querySelectorAll(".packed-checkbox").forEach(box => {
+        const depoLabel = document.querySelector('label[for="depo"]');
+        const regionLabel = document.querySelector('label[for="region"]');
 
+        function updateIcon(box) {
             const icon = box.nextElementSibling;
 
-            function updateIcon(){
+            if (box.checked) {
+                icon.className = "fa-solid fa-square-check";
+                icon.style.color = "#16a34a"; // green
+            } else {
+                icon.className = "fa-regular fa-square";
+                icon.style.color = "#dc2626"; // red
+            }
+        }
 
-                if(box.checked){
+        function updateStatusAvailability() {
+            const allPacked =
+                packedCheckboxes.length > 0 &&
+                Array.from(packedCheckboxes).every(box => box.checked);
 
-                    icon.className="fa-solid fa-square-check";
+            statusSelect.disabled = !allPacked;
 
-                }else{
+            if (allPacked) {
+                statusSelect.style.opacity = "1";
+                statusSelect.style.cursor = "pointer";
+            } else {
+                statusSelect.style.opacity = "0.6";
+                statusSelect.style.cursor = "not-allowed";
+            }
+        }
 
-                    icon.className="fa-solid fa-square-xmark";
+        function updateDepoRegionVisibility() {
+            const selectedStatus = statusSelect.value;
+            const showExtraFields = selectedStatus !== "Ontvangen";
 
-                }
+            depoSelect.style.display = showExtraFields ? "block" : "none";
+            regionSelect.style.display = showExtraFields ? "block" : "none";
 
+            if (depoLabel) {
+                depoLabel.style.display = showExtraFields ? "block" : "none";
             }
 
-            updateIcon();
+            if (regionLabel) {
+                regionLabel.style.display = showExtraFields ? "block" : "none";
+            }
+        }
 
-            box.addEventListener("change", async function(){
+        async function savePackedState(box) {
+            const formData = new FormData();
+            formData.append("orderId", box.dataset.order);
+            formData.append("productName", box.dataset.product);
+            formData.append("packed", box.checked);
 
-                updateIcon();
-
-                const formData = new FormData();
-
-                formData.append("orderId", this.dataset.order);
-                formData.append("productName", this.dataset.product);
-                formData.append("packed", this.checked);
-
-                await fetch("/Orders/UpdatePackedState",{
-                    method:"POST",
-                    body:formData
-                });
-
+            await fetch("/Orders/UpdatePackedState", {
+                method: "POST",
+                body: formData
             });
+        }
 
+        packedCheckboxes.forEach(box => {
+            updateIcon(box);
+
+            box.addEventListener("change", async function () {
+                updateIcon(this);
+
+                await savePackedState(this);
+
+                updateStatusAvailability();
+            });
         });
 
+        statusSelect.addEventListener("change", updateDepoRegionVisibility);
+
+        // initial page state
+        updateStatusAvailability();
+        updateDepoRegionVisibility();
     </script>
 </section>
